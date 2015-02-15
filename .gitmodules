@@ -1,0 +1,3 @@
+[submodule "deps/minetest-australopithecus-utils"]
+	path = deps/minetest-australopithecus-utils
+	url = https://github.com/RobertZenz/minetest-australopithecus-utils.git

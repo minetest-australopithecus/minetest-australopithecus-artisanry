@@ -1,0 +1,14 @@
+minetest-australopithecus-artisanry
+===================================
+
+A replacement for the builtin crafting system of Minetest.
+
+
+Features
+--------
+
+ * 5x5 crafting grid (instead of 3x3)
+ * Support for identical receipts with different output
+ * (TODO) Support for multiple outputs for one receipt
+ * Custom inventory screen (optional)
+
