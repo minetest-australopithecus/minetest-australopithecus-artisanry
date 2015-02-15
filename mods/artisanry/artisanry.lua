@@ -41,6 +41,10 @@ end
 
 
 function Artisanry:get_blueprints(input)
+	if input == nil then
+		return tableutil.clone(self.blueprints)
+	end
+	
 	local found = List:new()
 	
 	self.blueprints:foreach(function(value, index)

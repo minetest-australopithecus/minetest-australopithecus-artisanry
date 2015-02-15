@@ -4,7 +4,9 @@ dofile("./mods/utils/test.lua")
 
 -- Load the dummy ItemStack
 dofile("./mods/utils/list.lua")
+dofile("./mods/utils/mathutil.lua")
 dofile("./mods/utils/stringutil.lua")
+dofile("./mods/utils/tableutil.lua")
 dofile("./test/dummyitemstack.lua")
 
 -- Now load the file for testing.

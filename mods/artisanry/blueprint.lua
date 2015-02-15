@@ -79,8 +79,7 @@ function Blueprint:match(input)
 			local blueprint_part = self.input[index]
 			local input_part = input[index]
 			
-			print(blueprint_part:get_count() .. " > " .. input_part:get_count() .. " or " ..
-			 blueprint_part:get_name() .. " ~= " .. input_part:get_name())
+			blueprint_part:get_name() .. " ~= " .. input_part:get_name())
 			
 			if blueprint_part:get_count() > input_part:get_count() or
 			 blueprint_part:get_name() ~= input_part:get_name() then
