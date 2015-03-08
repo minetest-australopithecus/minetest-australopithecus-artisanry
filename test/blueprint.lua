@@ -26,3 +26,14 @@ test.run("constructor", function()
 	
 end)
 
+test.run("constructor_padding", function()
+	local blueprint = Blueprint:new("glass", {
+		"sand 5", "secret 4"
+	})
+	
+	local input = blueprint:get_input()
+	
+	test.equals(false, input[3] == nil)
+	test.equals(false, input[5] == nil)
+	test.equals(false, input[25] == nil)
+end)

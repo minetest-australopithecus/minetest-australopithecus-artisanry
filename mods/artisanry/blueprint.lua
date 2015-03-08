@@ -42,6 +42,12 @@ function Blueprint:new(result, input)
 		result = ItemStack(result)
 	}
 	
+	for index = 1, 25, 1 do
+		if instance.input[index] == nil then
+			instance.input[index] = ""
+		end
+	end
+	
 	for index, part in ipairs(instance.input) do
 		instance.input[index] = ItemStack(part)
 	end
