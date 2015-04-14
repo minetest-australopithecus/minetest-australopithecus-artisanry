@@ -76,6 +76,21 @@
 <table class="function_list">
 
     <tr>
+    <td class="name" nowrap><a href="#Blueprint.as_stacks">Blueprint.as_stacks</a>&nbsp;(input)</td>
+    <td class="summary">Converts the given input from strings to ItemStacks.</td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#Blueprint.is_empty">Blueprint.is_empty</a>&nbsp;(item)</td>
+    <td class="summary">Checks if the given item is empty.</td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#Blueprint.reduce">Blueprint.reduce</a>&nbsp;(input)</td>
+    <td class="summary">Reduces the given input, removing empty rows and columns.</td>
+    </tr>
+
+    <tr>
     <td class="name" nowrap><a href="#Blueprint:get_input">Blueprint:get_input</a>&nbsp;()</td>
     <td class="summary">Gets the input for this Blueprint.</td>
     </tr>
@@ -110,6 +125,93 @@
 
 <h2><a name="functions"></a>Functions</h2>
 <dl class="function">
+
+
+
+<dt><a name="Blueprint.as_stacks"></a><strong>Blueprint.as_stacks</strong>&nbsp;(input)</dt>
+<dd>
+Converts the given input from strings to ItemStacks. 
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  input: The input to convert.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+The input as ItemStacks.
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Blueprint.is_empty"></a><strong>Blueprint.is_empty</strong>&nbsp;(item)</dt>
+<dd>
+Checks if the given item is empty. That means if it is either nil, an empty string or an ItemStack that is empty. 
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  item: The item to check.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+true If the item can be considered empty.
+
+
+
+</dd>
+
+
+
+
+<dt><a name="Blueprint.reduce"></a><strong>Blueprint.reduce</strong>&nbsp;(input)</dt>
+<dd>
+Reduces the given input, removing empty rows and columns. 
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  input: The input to reduce.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+The reduced input.
+
+
+
+</dd>
+
 
 
 
