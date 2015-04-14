@@ -12,3 +12,13 @@ Features
  * (TODO) Support for multiple outputs for one receipt
  * Custom inventory screen (optional)
 
+
+Usage
+-----
+
+    -- Instanciate a new Artinsary object
+    local artisanry = Artisanry:new()
+    
+    -- Activate the inventory replacement
+    ArtisanryUI.activate(artisanry)
+    
