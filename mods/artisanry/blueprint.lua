@@ -186,7 +186,6 @@ function Blueprint:match(input)
 	local reduced_input = Blueprint.as_stacks(Blueprint.reduce(input))
 	
 	if #self.input ~= #reduced_input then
-		print(#self.input .. " " .. #reduced_input)
 		return false
 	end
 	
