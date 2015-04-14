@@ -105,6 +105,27 @@ function ArtisanryUI.build_formspec()
 	return formspec
 end
 
+--- Converts the given inventory data to a blueprint input data. Basically that
+-- just means that it gets converted from a flat to a 2D array.
+--
+-- @param inventory The inventory data to convert.
+-- @return The blueprint data.
+function ArtisanryUI.inventory_to_blueprint_input(inventory)
+	local input = {}
+	
+	for row_index = 1, 5, 1 do
+		local row = {}
+		
+		for column_index = 1, 5, 1 do
+			row[column_index] = inventory[(row_index - 1) * 5 + column_index]
+		end
+		
+		input[row_index] = row
+	end
+	
+	return input
+end
+
 --- Replaces the inventory of every currently connected player with
 -- the ArtisanryUI one.
 function ArtisanryUI.replace_inventories()
@@ -177,10 +198,12 @@ function ArtisanryUI.update_inventory(player)
 			inventory:set_stack("result", index, result.item)
 			index = index + 1
 		end
-	
+		
+		input = ArtisanryUI.inventory_to_blueprint_input(input)
+		
 		ArtisanryUI.artisanry:get_blueprints(input):foreach(function(value)
 			inventory:set_stack("result", index, value.result)
-		
+			
 			index = index + 1
 		end)
 	end

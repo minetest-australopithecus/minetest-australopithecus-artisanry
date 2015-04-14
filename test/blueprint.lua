@@ -1,5 +1,7 @@
 
 -- Load the test file.
+dofile("./mods/utils/list.lua")
+dofile("./mods/utils/tableutil.lua")
 dofile("./mods/utils/test.lua")
 
 -- Load the dummy ItemStack
@@ -15,25 +17,52 @@ dofile("./mods/artisanry/blueprint.lua")
 
 test.start("Blueprint")
 
-test.run("constructor", function()
-	local blueprint = Blueprint:new("glass", {
-		"sand 5", "test 4", "", "", "",
-		"", "", "", "", "",
-		"", "", "", "", "",
-		"", "", "", "", "",
-		"", "", "", "", "",
+
+test.run("match", function()
+	local blueprint = Blueprint:new("item", {
+		{ "ingredient 5", "other 4" },
+		{ "", "coal 7" },
 	})
 	
+	test.equals(true, blueprint:match({
+		{ "", "", "", "", "" },
+		{ "", "", "", "", "" },
+		{ "ingredient 5", "other 4", "", "", "" },
+		{ "", "coal 7", "", "", "" },
+		{ "", "", "", "", "" }
+	}))
 end)
 
-test.run("constructor_padding", function()
-	local blueprint = Blueprint:new("glass", {
-		"sand 5", "secret 4"
+test.run("reduce", function()
+	local reduced = Blueprint.reduce({
+		{ "", "", "", "", "" },
+		{ "", "", "N", "", "" },
+		{ "", "W", "C", "E", "" },
+		{ "", "", "S", "", "" },
+		{ "", "", "", "", "" }
 	})
+	local expected = {
+		{ "", "N", "" },
+		{ "W", "C", "E" },
+		{ "", "S", "" }
+	}
 	
-	local input = blueprint:get_input()
+	test.equals(true, tableutil.equals(expected, reduced))
 	
-	test.equals(false, input[3] == nil)
-	test.equals(false, input[5] == nil)
-	test.equals(false, input[25] == nil)
+	reduced = Blueprint.reduce({})
+	expected = {}
+	
+	test.equals(true, tableutil.equals(expected, reduced))
+	
+	reduced = Blueprint.reduce({
+		{ "", "", "", "", "" },
+		{ "", "A", "", "", "" },
+		{ "", "", "", "", "" },
+		{ "", "", "", "", "" },
+		{ "", "", "", "", "" }
+	})
+	expected = {{"A"}}
+	
+	test.equals(true, tableutil.equals(expected, reduced))
 end)
+

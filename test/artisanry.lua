@@ -22,12 +22,14 @@ test.run("simple", function()
 	test.equals(0, artisanry:get_blueprints():size())
 	
 	artisanry:register("result", {
-		"item", "", "", "", "",
-		"", "", "", "", "",
-		"", "", "", "", "",
-		"", "", "", "", "",
-		"", "", "", "", ""
+		{ "item", "", "", "", "" },
+		{ "", "", "", "", "" },
+		{ "", "", "", "", "" },
+		{ "", "", "", "", "" },
+		{ "", "", "", "", "" }
 	})
+	
+	test.equals(1, artisanry:get_blueprints():size())
 	
 end)
 
