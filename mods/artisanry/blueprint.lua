@@ -67,82 +67,6 @@ function Blueprint.is_empty(item)
 	return false
 end
 
---- Reduces the given input, removing empty rows and columns.
---
--- @param input The input to reduce.
--- @return The reduced input.
-function Blueprint.reduce(input)
-	local first_row = -1
-	local last_row = -1
-	
-	for row_index = 1, #input, 1 do
-		local row = input[row_index]
-		local row_is_empty = true
-		
-		for column_index = 1, #row, 1 do
-			if not Blueprint.is_empty(row[column_index]) then
-				row_is_empty = false
-			end
-		end
-
-		if not row_is_empty then
-			if first_row == -1 then
-				first_row = row_index
-			else
-				last_row = row_index
-			end
-		end
-	end
-	
-	local first_column = -1
-	local last_column = -1
-	
-	for column_index = 1, 5, 1 do
-		local column_is_empty = true
-		
-		for row_index = 1, #input, 1 do
-			local row = input[row_index]
-			
-			if column_index <= #row and not Blueprint.is_empty(row[column_index]) then
-				column_is_empty = false
-			end
-		end
-		
-		if not column_is_empty then
-			if first_column == -1 then
-				first_column = column_index
-			else
-				last_column = column_index
-			end
-		end
-	end
-	
-	if last_row == -1 then
-		last_row = first_row
-	end
-	
-	if last_column == -1 then
-		last_column = first_column
-	end
-	
-	local reduced = {}
-	
-	if first_row ~= -1 and first_column ~= -1 then
-		for row_index = first_row, last_row, 1 do
-			local row = input[row_index]
-			local reduced_row = {}
-		
-			for column_index = first_column, last_column, 1 do
-				reduced_row[column_index - first_column + 1] = row[column_index]
-			end
-		
-			reduced[row_index - first_row + 1] = reduced_row
-		end
-	end
-	
-	return reduced
-end
-
 
 --- Creates a new instance of Blueprint.
 --
@@ -153,7 +77,7 @@ end
 -- @return The new instance of Blueprint.
 function Blueprint:new(result, input)
 	local instance = {
-		input = Blueprint.as_stacks(Blueprint.reduce(input)),
+		input = Blueprint.as_stacks(tableutil.reduce2d(input, Blueprint.is_empty)),
 		result = ItemStack(result)
 	}
 	
@@ -183,7 +107,7 @@ end
 -- @param input The input, a table of 25 ItemStacks or less.
 -- @return true if this blueprint matches the given input.
 function Blueprint:match(input)
-	local reduced_input = Blueprint.as_stacks(Blueprint.reduce(input))
+	local reduced_input = Blueprint.as_stacks(tableutil.reduce2d(input, Blueprint.is_empty))
 	
 	if #self.input ~= #reduced_input then
 		return false

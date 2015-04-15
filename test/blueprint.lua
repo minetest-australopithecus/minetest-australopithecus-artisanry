@@ -33,36 +33,3 @@ test.run("match", function()
 	}))
 end)
 
-test.run("reduce", function()
-	local reduced = Blueprint.reduce({
-		{ "", "", "", "", "" },
-		{ "", "", "N", "", "" },
-		{ "", "W", "C", "E", "" },
-		{ "", "", "S", "", "" },
-		{ "", "", "", "", "" }
-	})
-	local expected = {
-		{ "", "N", "" },
-		{ "W", "C", "E" },
-		{ "", "S", "" }
-	}
-	
-	test.equals(true, tableutil.equals(expected, reduced))
-	
-	reduced = Blueprint.reduce({})
-	expected = {}
-	
-	test.equals(true, tableutil.equals(expected, reduced))
-	
-	reduced = Blueprint.reduce({
-		{ "", "", "", "", "" },
-		{ "", "A", "", "", "" },
-		{ "", "", "", "", "" },
-		{ "", "", "", "", "" },
-		{ "", "", "", "", "" }
-	})
-	expected = {{"A"}}
-	
-	test.equals(true, tableutil.equals(expected, reduced))
-end)
-

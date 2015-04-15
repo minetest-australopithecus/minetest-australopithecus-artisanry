@@ -29,8 +29,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -- with the Artisanry one.
 ArtisanryUI = {
 	artisanry = nil,
-	cache = {},
-	formspec = ""
+	formspec = "",
+	input_hashes = {}
 }
 
 
@@ -174,19 +174,20 @@ end
 --
 -- @param player The player for which to update the inventory.
 function ArtisanryUI.update_inventory(player)
-	local inventory = player:get_inventory()
-	local input = inventory:get_list("input")
-	local input_string = ArtisanryUI.stacks_to_string(input)
-	local cached_input = ArtisanryUI.cache[player:get_player_name()]
+	local player_name = player:get_player_name()
 	
-	if cached_input == input_string then
+	local inventory = player:get_inventory()
+	local cached_hash = ArtisanryUI.input_hashes[player_name]
+	
+	if inventoryutil.equals_hash(inventory, "input", cached_hash) then
 		return
 	end
 	
-	ArtisanryUI.cache[player:get_player_name()] = input_string
+	ArtisanryUI.input_hashes[player_name] = inventoryutil.hash(inventory, "input")
 	
+	local input = inventory:get_list("input")
 	local index = 1
-		
+	
 	if not ArtisanryUI.artisanry:is_empty(input) then
 		local result = minetest.get_craft_result({
 			method = "normal",
