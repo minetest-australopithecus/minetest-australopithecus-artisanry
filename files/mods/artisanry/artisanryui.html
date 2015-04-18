@@ -90,6 +90,16 @@
     </tr>
 
     <tr>
+    <td class="name" nowrap><a href="#ArtisanryUI.has_changed">ArtisanryUI.has_changed</a>&nbsp;(player, inventory_name)</td>
+    <td class="summary">Checks if the inventory has changed compared to the saved hash.</td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#ArtisanryUI.put_hash">ArtisanryUI.put_hash</a>&nbsp;(player, inventory_name)</td>
+    <td class="summary">Puts the hash of the inventory, for using it later.</td>
+    </tr>
+
+    <tr>
     <td class="name" nowrap><a href="#ArtisanryUI.replace_inventories">ArtisanryUI.replace_inventories</a>&nbsp;()</td>
     <td class="summary">Replaces the inventory of every currently connected player with the ArtisanryUI one.</td>
     </tr>
@@ -169,6 +179,69 @@ Builds the formspec for the ArtisanryUI inventory.
 
 <h3>Return value:</h3>
 The formspec for the inventory.
+
+
+
+</dd>
+
+
+
+
+<dt><a name="ArtisanryUI.has_changed"></a><strong>ArtisanryUI.has_changed</strong>&nbsp;(player, inventory_name)</dt>
+<dd>
+Checks if the inventory has changed compared to the saved hash. 
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  player: The Player object that owns the inventory.
+	</li>
+	
+	<li>
+	  inventory_name: The name of the inventory.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+true if the inventory has changed since the last check. Also true if there is no saved hash for this inventory.
+
+
+
+</dd>
+
+
+
+
+<dt><a name="ArtisanryUI.put_hash"></a><strong>ArtisanryUI.put_hash</strong>&nbsp;(player, inventory_name)</dt>
+<dd>
+Puts the hash of the inventory, for using it later. 
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  player: The Player object that owns the inventory.
+	</li>
+	
+	<li>
+	  inventory_name: The name of the inventory.
+	</li>
+	
+</ul>
+
+
+
+
+
 
 
 
