@@ -1,7 +1,8 @@
 minetest-australopithecus-artisanry
 ===================================
 
-A replacement for the builtin crafting system of Minetest.
+A replacement for the builtin crafting system of Minetest, with the main goal
+to support multiple identical receipts with different output.
 
 
 Features
@@ -9,17 +10,31 @@ Features
 
  * 5x5 crafting grid (instead of 3x3)
  * Support for identical receipts with different output
- * (TODO) Support for multiple outputs for one receipt
  * Custom inventory screen (optional)
+
+
+Planned Features
+----------------
+
+ * Support for multiple outputs of one receipt (f.e. explode a pickaxe)
+ * Custom size of the crafting grid
+ * Support for inventories of nodes (f.e. chest/furnace)
+ * Chaining/Inheriting of multiple Artisanry objects
+
+
+Dependencies
+------------
+
+The currently only dependency is the minetest-australopithecus-utils mod.
 
 
 Usage
 -----
 
-    -- Instanciate a new Artinsary object
+    -- Instanciate a new Artinsary object.
     local artisanry = Artisanry:new()
     
-    -- Activate the inventory replacement
+    -- Activate the inventory replacement.
     ArtisanryUI.activate(artisanry)
     
     -- You can register crafts like this.
@@ -32,7 +47,7 @@ Usage
     	{ "yourmod:different_input" }
     })
     
-    -- And here is the complete input
+    -- And here is the complete input.
     artinsary:register("yourmod:output", {
     	{ "", "", "yourmod:different_input", "", "" },
     	{ "", "", "", "", "" },
