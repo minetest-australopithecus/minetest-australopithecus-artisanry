@@ -44,7 +44,7 @@ ArtisanryUI = {
 --                 the inventories and crafting tables or all players is updated
 --                 in this interval.
 function ArtisanryUI.activate(artisanry, interval)
-	interval = interval or 0.3333
+	interval = interval or 0.123
 	
 	ArtisanryUI.artisanry = artisanry
 	ArtisanryUI.formspec = ArtisanryUI.build_formspec()
