@@ -96,8 +96,8 @@ function ArtisanryUI.build_formspec()
 			inventory_background = inventory_background .. "background[" .. x .. ",6;3,3;artisanry_light_tile.png]"
 	end
 	
-	local input = "list[current_player;input;1,1;5,5;]"
-	local result = "list[current_player;result;8,1;5,5;]"
+	local input = "list[current_player;artisanry-input;1,1;5,5;]"
+	local result = "list[current_player;artisanry-output;8,1;5,5;]"
 	local inventory = "list[current_player;main;3,7;8,4;]"
 	
 	local formspec = window .. input_background .. result_background .. inventory_background .. input .. result .. inventory
@@ -154,8 +154,8 @@ end
 --
 -- @param player The player for which to replace the inventory.
 function ArtisanryUI.replace_inventory(player)
-	player:get_inventory():set_size("input", 25)
-	player:get_inventory():set_size("result", 25)
+	player:get_inventory():set_size("artisanry-input", 25)
+	player:get_inventory():set_size("artisanry-output", 25)
 	player:set_inventory_formspec(ArtisanryUI.formspec)
 end
 
@@ -170,16 +170,16 @@ end
 --
 -- @param player The player for which to update the inventory.
 function ArtisanryUI.update_inventory(player)
-	if not ArtisanryUI.has_changed(player, "input") then
+	if not ArtisanryUI.has_changed(player, "artisanry-input") then
 		return
 	end
 	
 	-- Okay, it has changed, put the new hash.
-	ArtisanryUI.put_hash(player, "input")
+	ArtisanryUI.put_hash(player, "artisanry-input")
 	
 	local inventory = player:get_inventory()
 	
-	local input = inventory:get_list("input")
+	local input = inventory:get_list("artisanry-input")
 	local index = 1
 	
 	if not artisanryutil.is_empty_stacks(input) then
@@ -190,21 +190,21 @@ function ArtisanryUI.update_inventory(player)
 		})
 		
 		if not result.item:is_empty() then
-			inventory:set_stack("result", index, result.item)
+			inventory:set_stack("artisanry-output", index, result.item)
 			index = index + 1
 		end
 		
 		input = artisanryutil.flat_to_grid(input)
 		
 		ArtisanryUI.artisanry:get_blueprints(input):foreach(function(value)
-			inventory:set_stack("result", index, value.result)
+			inventory:set_stack("artisanry-output", index, value.result)
 			
 			index = index + 1
 		end)
 	end
 	
 	while index <= 25 do
-		inventory:set_stack("result", index, nil)
+		inventory:set_stack("artisanry-output", index, nil)
 		index = index + 1
 	end
 end
