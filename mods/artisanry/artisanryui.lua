@@ -30,7 +30,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ArtisanryUI = {
 	artisanry = nil,
 	formspec = "",
-	input_hashes = {}
+	hashes = {}
 }
 
 
@@ -103,6 +103,43 @@ function ArtisanryUI.build_formspec()
 	local formspec = window .. input_background .. result_background .. inventory_background .. input .. result .. inventory
 	
 	return formspec
+
+end
+
+--- Checks if the inventory has changed compared to the saved hash.
+--
+-- @param player The Player object that owns the inventory.
+-- @param inventory_name The name of the inventory.
+-- @return true if the inventory has changed since the last check. Also true if
+--         there is no saved hash for this inventory.
+function ArtisanryUI.has_changed(player, inventory_name)
+	local player_name = player:get_player_name()
+	local hashes = ArtisanryUI.hashes[player_name]
+	
+	if hashes == nil or hashes[inventory_name] == nil then
+		-- Return true if we don't have a hash by now to force an update.
+		return true
+	end
+	
+	local hash = hashes[inventory_name]
+	
+	return not inventoryutil.equals_hash(player:get_inventory(), inventory_name, hash)
+end
+
+--- Puts the hash of the inventory, for using it later.
+--
+-- @param player The Player object that owns the inventory.
+-- @param inventory_name The name of the inventory.
+function ArtisanryUI.put_hash(player, inventory_name)
+	local player_name = player:get_player_name()
+	local hashes = ArtisanryUI.hashes[player_name]
+	
+	if hashes == nil then
+		hashes = {}
+		ArtisanryUI.hashes[player_name] = hashes
+	end
+	
+	hashes[inventory_name] = inventoryutil.hash(player:get_inventory(), inventory_name)
 end
 
 --- Replaces the inventory of every currently connected player with
@@ -133,16 +170,14 @@ end
 --
 -- @param player The player for which to update the inventory.
 function ArtisanryUI.update_inventory(player)
-	local player_name = player:get_player_name()
-	
-	local inventory = player:get_inventory()
-	local cached_hash = ArtisanryUI.input_hashes[player_name]
-	
-	if inventoryutil.equals_hash(inventory, "input", cached_hash) then
+	if not ArtisanryUI.has_changed(player, "input") then
 		return
 	end
 	
-	ArtisanryUI.input_hashes[player_name] = inventoryutil.hash(inventory, "input")
+	-- Okay, it has changed, put the new hash.
+	ArtisanryUI.put_hash(player, "input")
+	
+	local inventory = player:get_inventory()
 	
 	local input = inventory:get_list("input")
 	local index = 1
