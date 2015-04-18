@@ -207,9 +207,18 @@ function ArtisanryUI.update_inventory(player)
 	end
 	
 	if ArtisanryUI.has_changed(player, "artisanry-output") then
-		local output_hash = ArtisanryUI.hashes[player:get_player_name()]["artisanry_output"]
+		local output_hash = ArtisanryUI.hashes[player:get_player_name()]["artisanry-output"]
+		local difference = inventoryutil.difference_hash(player:get_inventory(), "artisanry-output", output_hash)
 		
-		-- TODO Change the input accordingly.
+		for index = 1, 25, 1 do
+			local item_difference = difference[index]
+			
+			if item_difference.count < 0 then
+				-- TODO Change the input accordingly.
+			end
+		end
+		
+		ArtisanryUI.put_hash(player, "artisanry-output")
 	end
 end
 
