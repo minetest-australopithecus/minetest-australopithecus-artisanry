@@ -30,5 +30,6 @@ local base_path = minetest.get_modpath(minetest.get_current_modname())
 
 dofile(base_path .. "/artisanry.lua")
 dofile(base_path .. "/artisanryui.lua")
+dofile(base_path .. "/artisanryutil.lua")
 dofile(base_path .. "/blueprint.lua")
 

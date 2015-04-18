@@ -29,55 +29,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Blueprint = {}
 
 
---- Converts the given input from strings to ItemStacks.
---
--- @param input The input to convert.
--- @return The input as ItemStacks.
-function Blueprint.as_stacks(input)
-	local stacks = {}
-	
-	for row_index = 1, #input, 1 do
-		local row = input[row_index]
-		local stacks_row = {}
-		
-		for column_index = 1, #row, 1 do
-			stacks_row[column_index] = ItemStack(row[column_index])
-		end
-		
-		stacks[row_index] = stacks_row
-	end
-	
-	return stacks
-end
-
---- Checks if the given item is empty. That means if it is either nil, an empty
--- string or an ItemStack that is empty.
---
--- @param item The item to check.
--- @return true If the item can be considered empty.
-function Blueprint.is_empty(item)
-	if item == nil or item == "" then
-		return true
-	end
-	
-	if type(item) == "userdata" then
-		return item:is_empty()
-	end
-	
-	return false
-end
-
-
 --- Creates a new instance of Blueprint.
 --
 -- @param result The result of the blueprint, an item string like "sand 5"
 --               or "glass".
--- @param input The input for the blueprint, a table with 25 item strings
---              or less.
+-- @param input The input for the blueprint, a 2D array with 5 rows and columns.
 -- @return The new instance of Blueprint.
 function Blueprint:new(result, input)
 	local instance = {
-		input = Blueprint.as_stacks(tableutil.reduce2d(input, Blueprint.is_empty)),
+		input = artisanryutil.convert(input),
 		result = ItemStack(result)
 	}
 	
@@ -90,7 +50,7 @@ end
 
 --- Gets the input for this Blueprint.
 --
--- @return The input of this Blueprint, a table with 25 ItemStacks or less.
+-- @return The input of this Blueprint, a 2D array with 5 rows and columns.
 function Blueprint:get_input()
 	return self.input
 end
@@ -104,18 +64,16 @@ end
 
 --- Matches this blueprint against the given input.
 --
--- @param input The input, a table of 25 ItemStacks or less.
+-- @param input The input, already reduced and converted to ItemStacks.
 -- @return true if this blueprint matches the given input.
 function Blueprint:match(input)
-	local reduced_input = Blueprint.as_stacks(tableutil.reduce2d(input, Blueprint.is_empty))
-	
-	if #self.input ~= #reduced_input then
+	if #self.input ~= #input then
 		return false
 	end
 	
 	for row_index = 1, #self.input, 1 do
 		local blueprint_row = self.input[row_index]
-		local input_row = reduced_input[row_index]
+		local input_row = input[row_index]
 		
 		if #blueprint_row ~= #input_row then
 			return false
@@ -127,6 +85,7 @@ function Blueprint:match(input)
 			
 			if blueprint_part:get_count() > input_part:get_count() or
 			 blueprint_part:get_name() ~= input_part:get_name() then
+				
 				return false
 			end
 		end

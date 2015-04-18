@@ -47,29 +47,15 @@ function Artisanry:get_blueprints(input)
 	
 	local found = List:new()
 	
+	local reduced_input = artisanryutil.convert(input)
+	
 	self.blueprints:foreach(function(value, index)
-		if value:match(input) then
+		if value:match(reduced_input) then
 			found:add(value)
 		end
 	end)
 	
 	return found
-end
-
-function Artisanry:is_empty(input)
-	if input == nil then
-		return true
-	end
-	
-	for index, part in ipairs(input) do
-		if part ~= nil then
-			if not part:is_empty() then
-				return false
-			end
-		end
-	end
-	
-	return true
 end
 
 function Artisanry:register(result, input)

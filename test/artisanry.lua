@@ -9,6 +9,8 @@ dofile("./mods/utils/stringutil.lua")
 dofile("./mods/utils/tableutil.lua")
 dofile("./test/dummyitemstack.lua")
 
+dofile("./mods/artisanry/artisanryutil.lua")
+
 -- Now load the file for testing.
 dofile("./mods/artisanry/artisanry.lua")
 dofile("./mods/artisanry/blueprint.lua")

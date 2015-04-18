@@ -11,6 +11,8 @@ dofile("./mods/utils/stringutil.lua")
 dofile("./mods/utils/tableutil.lua")
 dofile("./test/dummyitemstack.lua")
 
+dofile("./mods/artisanry/artisanryutil.lua")
+
 -- Now load the file for testing.
 dofile("./mods/artisanry/blueprint.lua")
 
@@ -24,12 +26,12 @@ test.run("match", function()
 		{ "", "coal 7" },
 	})
 	
-	test.equals(true, blueprint:match({
+	test.equals(true, blueprint:match(artisanryutil.convert({
 		{ "", "", "", "", "" },
 		{ "", "", "", "", "" },
 		{ "ingredient 5", "other 4", "", "", "" },
 		{ "", "coal 7", "", "", "" },
 		{ "", "", "", "", "" }
-	}))
+	})))
 end)
 

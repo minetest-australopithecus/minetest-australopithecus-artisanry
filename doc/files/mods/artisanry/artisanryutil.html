@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+    <title>Luadocs for mods/artisanry/artisanryutil.lua</title>
+    <link rel="stylesheet" href="../../../luadoc.css" type="text/css" />
+    <!--meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/-->
+</head>
+
+<body>
+<div id="container">
+
+<div id="product">
+    <div id="product_logo"></div>
+    <div id="product_name"><big><b></b></big></div>
+    <div id="product_description"></div>
+</div> <!-- id="product" -->
+
+<div id="main">
+
+<div id="navigation">
+
+
+<h1>LuaDoc</h1>
+<ul>
+	
+	<li><a href="../../../index.html">Index</a></li>
+	
+</ul>
+
+
+<!-- Module list -->
+
+
+
+<!-- File list -->
+
+<h1>Files</h1>
+<ul>
+
+	<li>
+		<a href="../../../files/mods/artisanry/artisanry.html">mods/artisanry/artisanry.lua</a>
+	</li>
+
+	<li>
+		<a href="../../../files/mods/artisanry/artisanryui.html">mods/artisanry/artisanryui.lua</a>
+	</li>
+
+	<li><strong>mods/artisanry/artisanryutil.lua</strong></li>
+	
+	<li>
+		<a href="../../../files/mods/artisanry/blueprint.html">mods/artisanry/blueprint.lua</a>
+	</li>
+
+	<li>
+		<a href="../../../files/mods/artisanry/init.html">mods/artisanry/init.lua</a>
+	</li>
+
+</ul>
+
+
+
+
+
+
+</div> <!-- id="navigation" -->
+
+<div id="content">
+
+<h1>File <code>mods/artisanry/artisanryutil.lua</code></h1>
+
+
+
+
+
+
+
+<h2>Functions</h2>
+<table class="function_list">
+
+    <tr>
+    <td class="name" nowrap><a href="#artisanryutil.as_stacks">artisanryutil.as_stacks</a>&nbsp;(input)</td>
+    <td class="summary">Converts the given input from strings to ItemStacks.</td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#artisanryutil.convert">artisanryutil.convert</a>&nbsp;(input, The)</td>
+    <td class="summary">Reduces and converts the given input to ItemStacks.</td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#artisanryutil.flat_to_grid">artisanryutil.flat_to_grid</a>&nbsp;(flat)</td>
+    <td class="summary">Converts the given data from a flat array to a 2D array.</td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#artisanryutil.is_empty_item">artisanryutil.is_empty_item</a>&nbsp;(item)</td>
+    <td class="summary">Checks if the given item is empty.</td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#artisanryutil.is_empty_stacks">artisanryutil.is_empty_stacks</a>&nbsp;(input)</td>
+    <td class="summary">Checks if the given array of ItemStacks is empty, meaning either all are nil, or all are empty.</td>
+    </tr>
+
+</table>
+
+
+
+
+
+
+<br/>
+<br/>
+
+
+
+
+<h2><a name="functions"></a>Functions</h2>
+<dl class="function">
+
+
+
+<dt><a name="artisanryutil.as_stacks"></a><strong>artisanryutil.as_stacks</strong>&nbsp;(input)</dt>
+<dd>
+Converts the given input from strings to ItemStacks. If the values are already ItemStacks, they are only copied. 
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  input: The input to convert.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+The input as ItemStacks.
+
+
+
+</dd>
+
+
+
+
+<dt><a name="artisanryutil.convert"></a><strong>artisanryutil.convert</strong>&nbsp;(input, The)</dt>
+<dd>
+Reduces and converts the given input to ItemStacks. 
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  input: The input to convert.
+	</li>
+	
+	<li>
+	  The: converted input.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="artisanryutil.flat_to_grid"></a><strong>artisanryutil.flat_to_grid</strong>&nbsp;(flat)</dt>
+<dd>
+Converts the given data from a flat array to a 2D array. 
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  flat: The data to convert.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+The grid data.
+
+
+
+</dd>
+
+
+
+
+<dt><a name="artisanryutil.is_empty_item"></a><strong>artisanryutil.is_empty_item</strong>&nbsp;(item)</dt>
+<dd>
+Checks if the given item is empty. That means if it is either nil, an empty string or an ItemStack that is empty. 
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  item: The item to check.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+true if the item can be considered empty.
+
+
+
+</dd>
+
+
+
+
+<dt><a name="artisanryutil.is_empty_stacks"></a><strong>artisanryutil.is_empty_stacks</strong>&nbsp;(input)</dt>
+<dd>
+Checks if the given array of ItemStacks is empty, meaning either all are nil, or all are empty. 
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  input: The array of ItemStacks.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+true if all are nil or empty.
+
+
+
+</dd>
+
+
+</dl>
+
+
+
+
+
+
+
+</div> <!-- id="content" -->
+
+</div> <!-- id="main" -->
+
+<div id="about">
+    <p><a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0!" height="31" width="88" /></a></p>
+</div> <!-- id="about" -->
+
+</div> <!-- id="container" -->
+</body>
+</html>
