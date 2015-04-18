@@ -170,42 +170,46 @@ end
 --
 -- @param player The player for which to update the inventory.
 function ArtisanryUI.update_inventory(player)
-	if not ArtisanryUI.has_changed(player, "artisanry-input") then
-		return
-	end
-	
-	-- Okay, it has changed, put the new hash.
-	ArtisanryUI.put_hash(player, "artisanry-input")
-	
-	local inventory = player:get_inventory()
-	
-	local input = inventory:get_list("artisanry-input")
-	local index = 1
-	
-	if not artisanryutil.is_empty_stacks(input) then
-		local result = minetest.get_craft_result({
-			method = "normal",
-			width = 5,
-			items = input
-		})
+	if ArtisanryUI.has_changed(player, "artisanry-input") then
+		local inventory = player:get_inventory()
 		
-		if not result.item:is_empty() then
-			inventory:set_stack("artisanry-output", index, result.item)
+		local input = inventory:get_list("artisanry-input")
+		local index = 1
+		
+		if not artisanryutil.is_empty_stacks(input) then
+			local result = minetest.get_craft_result({
+				method = "normal",
+				width = 5,
+				items = input
+			})
+			
+			if not result.item:is_empty() then
+				inventory:set_stack("artisanry-output", index, result.item)
+				index = index + 1
+			end
+			
+			input = artisanryutil.flat_to_grid(input)
+			
+			ArtisanryUI.artisanry:get_blueprints(input):foreach(function(value)
+				inventory:set_stack("artisanry-output", index, value.result)
+			
+				index = index + 1
+			end)
+		end
+		
+		while index <= 25 do
+			inventory:set_stack("artisanry-output", index, nil)
 			index = index + 1
 		end
 		
-		input = artisanryutil.flat_to_grid(input)
-		
-		ArtisanryUI.artisanry:get_blueprints(input):foreach(function(value)
-			inventory:set_stack("artisanry-output", index, value.result)
-			
-			index = index + 1
-		end)
+		ArtisanryUI.put_hash(player, "artisanry-input")
+		ArtisanryUI.put_hash(player, "artisanry-output")
 	end
 	
-	while index <= 25 do
-		inventory:set_stack("artisanry-output", index, nil)
-		index = index + 1
+	if ArtisanryUI.has_changed(player, "artisanry-output") then
+		local output_hash = ArtisanryUI.hashes[player_name]["artisanry_output"]
+		
+		-- TODO Change the input accordingly.
 	end
 end
 
