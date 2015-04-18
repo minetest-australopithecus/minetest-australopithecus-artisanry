@@ -122,26 +122,6 @@ function ArtisanryUI.replace_inventory(player)
 	player:set_inventory_formspec(ArtisanryUI.formspec)
 end
 
---- Converts the given ItemStacks to a string.
---
--- @param stacks The ItemStacks to convert to a string.
--- @return The string representing the given ItemStacks.
-function ArtisanryUI.stacks_to_string(stacks)
-	local value = ""
-	
-	for index = 1, 25, 1 do
-		local stack = stacks[index]
-		
-		if stack ~= nil and not stack:is_empty() then
-			value = value .. stack:to_string() .. ";"
-		end
-		
-		value = value .. ";"
-	end
-	
-	return value
-end
-
 --- Updates the inventories of all connected players.
 function ArtisanryUI.update_inventories()
 	for index, player in ipairs(minetest.get_connected_players()) do
