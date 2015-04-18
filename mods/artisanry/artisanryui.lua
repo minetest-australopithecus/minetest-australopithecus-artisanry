@@ -207,7 +207,7 @@ function ArtisanryUI.update_inventory(player)
 	end
 	
 	if ArtisanryUI.has_changed(player, "artisanry-output") then
-		local output_hash = ArtisanryUI.hashes[player_name]["artisanry_output"]
+		local output_hash = ArtisanryUI.hashes[player:get_player_name()]["artisanry_output"]
 		
 		-- TODO Change the input accordingly.
 	end
