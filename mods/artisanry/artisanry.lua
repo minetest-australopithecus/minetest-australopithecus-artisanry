@@ -25,9 +25,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 --]]
 
 
+--- The main Artisanry object that holds and manages all receipts.
 Artisanry = {}
 
 
+--- Creates a new instance of Artisanry.
+--
+-- @return A new instance of Artisanry.
 function Artisanry:new()
 	local instance = {
 		blueprints = List:new()
@@ -40,6 +44,11 @@ function Artisanry:new()
 end
 
 
+--- Gets all BluePrints matching the given input.
+--
+-- @param input The input, a 2D of strings or ItemStacks. Might be nil to
+--              retrieve all BluePrints.
+-- @return All matching BluePrints.
 function Artisanry:get_blueprints(input)
 	if input == nil then
 		return tableutil.clone(self.blueprints)
@@ -58,10 +67,17 @@ function Artisanry:get_blueprints(input)
 	return found
 end
 
+--- Registers the given input for the given result.
+--
+-- @param result The result of the input, an item string.
+-- @param input The 2D array of item strings or ItemStacks.
 function Artisanry:register(result, input)
 	self.blueprints:add(Blueprint:new(result, input))
 end
 
+--- Registers the given BluePrint.
+
+-- @param blueprint The BluePrint.
 function Artisanry:register_blueprint(blueprint)
 	self.blueprints:add(blueprint)
 end
