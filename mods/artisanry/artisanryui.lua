@@ -210,11 +210,22 @@ function ArtisanryUI.update_inventory(player)
 		local output_hash = ArtisanryUI.hashes[player:get_player_name()]["artisanry-output"]
 		local difference = inventoryutil.difference_hash(player:get_inventory(), "artisanry-output", output_hash)
 		
+		local inventory = player:get_inventory()
+		local input = inventory:get_list("artisanry-input")
+		input = artisanryutil.flat_to_grid(input)
+		input = artisanryutil.convert(input)
+		
 		for index = 1, 25, 1 do
 			local item_difference = difference[index]
 			
 			if item_difference.count < 0 then
-				-- TODO Change the input accordingly.
+				local blueprints = ArtisanryUI.artisanry:get_blueprints_from_output(item_difference.id)
+				
+				blueprints:foreach(function(blueprint)
+					if blueprint:match(input) then
+						-- TODO Reduce input inventory here.
+					end
+				end)
 			end
 		end
 		

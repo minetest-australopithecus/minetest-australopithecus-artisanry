@@ -54,17 +54,31 @@ function Artisanry:get_blueprints(input)
 		return tableutil.clone(self.blueprints)
 	end
 	
-	local found = List:new()
-	
 	local reduced_input = artisanryutil.convert(input)
 	
-	self.blueprints:foreach(function(value, index)
-		if value:match(reduced_input) then
-			found:add(value)
-		end
+	return self.blueprints:matching(function(blueprint)
+		return blueprint:match(reduced_input)
 	end)
+end
+
+--- Gets all BluePrints that match the given output.
+--
+-- @param output The output. Can either be an ItemStack, item string or id.
+-- @return The List containing all Blueprints that match the given output.
+function Artisanry:get_blueprints_from_output(output)
+	local comparer = function(blueprint)
+		return blueprint:get_result():get_name() == output:get_name()
+	end
 	
-	return found
+	if type(output) == "number" then
+		comparer = function(blueprint)
+			return minetest.get_content_id(blueprint:get_result():get_name()) == output
+		end
+	elseif type(output) ~= "userdata" then
+		output = ItemStack(output)
+	end
+	
+	return self.blueprints:matching(comparer)
 end
 
 --- Registers the given input for the given result.
