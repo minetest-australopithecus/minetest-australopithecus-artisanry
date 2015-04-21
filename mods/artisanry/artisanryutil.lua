@@ -59,7 +59,9 @@ end
 -- @param input The input to convert.
 -- @param The converted input.
 function artisanryutil.convert(input)
-	return artisanryutil.as_stacks(tableutil.reduce2d(input, artisanryutil.is_empty_item))
+	return artisanryutil.as_stacks(arrayutil.reduce2d(input, function(item)
+		return not artisanryutil.is_empty_item(item)
+	end))
 end
 
 
