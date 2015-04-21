@@ -166,93 +166,108 @@ function ArtisanryUI.update_inventories()
 	end
 end
 
+--- Updates from the input inventory of the given player.
+--
+-- @param player The player for which to update the inventories.
+function ArtisanryUI.update_from_input_inventory(player)
+	local inventory = player:get_inventory()
+	
+	local input = inventory:get_list("artisanry-input")
+	local index = 1
+	
+	if not artisanryutil.is_empty_stacks(input) then
+		local result = minetest.get_craft_result({
+			method = "normal",
+			width = 5,
+			items = input
+		})
+		
+		if not result.item:is_empty() then
+			inventory:set_stack("artisanry-output", index, result.item)
+			index = index + 1
+		end
+		
+		input = artisanryutil.flat_to_grid(input)
+		
+		ArtisanryUI.artisanry:get_blueprints(input):foreach(function(value)
+			inventory:set_stack("artisanry-output", index, value.result)
+		
+			index = index + 1
+		end)
+	end
+	
+	while index <= 25 do
+		inventory:set_stack("artisanry-output", index, nil)
+		index = index + 1
+	end
+end
+
 --- Updates the inventory of the given player.
 --
 -- @param player The player for which to update the inventory.
 function ArtisanryUI.update_inventory(player)
 	if ArtisanryUI.has_changed(player, "artisanry-input") then
-		local inventory = player:get_inventory()
-		
-		local input = inventory:get_list("artisanry-input")
-		local index = 1
-		
-		if not artisanryutil.is_empty_stacks(input) then
-			local result = minetest.get_craft_result({
-				method = "normal",
-				width = 5,
-				items = input
-			})
-			
-			if not result.item:is_empty() then
-				inventory:set_stack("artisanry-output", index, result.item)
-				index = index + 1
-			end
-			
-			input = artisanryutil.flat_to_grid(input)
-			
-			ArtisanryUI.artisanry:get_blueprints(input):foreach(function(value)
-				inventory:set_stack("artisanry-output", index, value.result)
-			
-				index = index + 1
-			end)
-		end
-		
-		while index <= 25 do
-			inventory:set_stack("artisanry-output", index, nil)
-			index = index + 1
-		end
-		
+		ArtisanryUI.update_from_input_inventory(player)
+	
 		ArtisanryUI.put_hash(player, "artisanry-input")
 		ArtisanryUI.put_hash(player, "artisanry-output")
 	end
 	
 	if ArtisanryUI.has_changed(player, "artisanry-output") then
-		local output_hash = ArtisanryUI.hashes[player:get_player_name()]["artisanry-output"]
-		local difference = inventoryutil.difference_hash(player:get_inventory(), "artisanry-output", output_hash)
-		
-		local inventory = player:get_inventory()
-		local input = inventory:get_list("artisanry-input")
-		local input_grid = artisanryutil.flat_to_grid(input)
-		local converted_input = artisanryutil.convert(input_grid)
-		
-		for index = 1, 25, 1 do
-			local item_difference = difference[index]
-			
-			if item_difference.count < 0 then
-				local blueprints = ArtisanryUI.artisanry:get_blueprints_from_output(item_difference.id)
-				
-				blueprints:foreach(function(blueprint)
-					if blueprint:match(converted_input) then
-						local start_row = arrayutil.next_matching_row(input_grid, nil, function(item)
-							return not artisanryutil.is_empty_item(item)
-						end)
-						local start_column = arrayutil.next_matching_column(input_grid, nil, function(item)
-							return not artisanryutil.is_empty_item(item)
-						end)
-						
-						local blueprint_input = blueprint:get_input()
-						
-						for row_index = start_row, start_row + #blueprint_input - 1, 1 do
-							local blueprint_row = blueprint_input[row_index - start_row + 1]
-							
-							for column_index = start_column, start_column + #blueprint_row - 1, 1 do
-								local inventory_index = (row_index - 1) * 5 + column_index
-								
-								local current_stack = input_grid[row_index][column_index]
-								local blueprint_stack = blueprint_row[column_index - start_column + 1]
-								
-								current_stack:set_count(current_stack:get_count() - blueprint_stack:get_count())
-								
-								inventory:set_stack("artisanry-input", inventory_index, current_stack)
-								
-							end
-						end
-					end
-				end)
-			end
-		end
+		ArtisanryUI.update_from_output_inventory(player)
 		
 		ArtisanryUI.put_hash(player, "artisanry-output")
+	end
+end
+
+--- Updates from the output inventory of the given player.
+--
+-- @param player The player for which to update the inventories.
+function ArtisanryUI.update_from_output_inventory(player)
+	local output_hash = ArtisanryUI.hashes[player:get_player_name()]["artisanry-output"]
+	local difference = inventoryutil.difference_hash(player:get_inventory(), "artisanry-output", output_hash)
+	
+	local inventory = player:get_inventory()
+	local input = inventory:get_list("artisanry-input")
+	local input_grid = artisanryutil.flat_to_grid(input)
+	local converted_input = artisanryutil.convert(input_grid)
+	
+	for index = 1, 25, 1 do
+		local item_difference = difference[index]
+		
+		if item_difference.count < 0 then
+			local blueprints = ArtisanryUI.artisanry:get_blueprints_from_output(item_difference.id)
+			
+			blueprints:foreach(function(blueprint)
+				if blueprint:match(converted_input) then
+					local start_row = arrayutil.next_matching_row(input_grid, nil, function(item)
+						return not artisanryutil.is_empty_item(item)
+					end)
+					local start_column = arrayutil.next_matching_column(input_grid, nil, function(item)
+						return not artisanryutil.is_empty_item(item)
+					end)
+					
+					local blueprint_input = blueprint:get_input()
+					
+					for row_index = start_row, start_row + #blueprint_input - 1, 1 do
+						local blueprint_row = blueprint_input[row_index - start_row + 1]
+						
+						for column_index = start_column, start_column + #blueprint_row - 1, 1 do
+							local inventory_index = (row_index - 1) * 5 + column_index
+							
+							local current_stack = input_grid[row_index][column_index]
+							local blueprint_stack = blueprint_row[column_index - start_column + 1]
+							
+							current_stack:set_count(current_stack:get_count() - blueprint_stack:get_count())
+							
+							inventory:set_stack("artisanry-input", inventory_index, current_stack)
+						end
+					end
+					
+					return
+				end
+			end)
+		end
 	end
 end
 
