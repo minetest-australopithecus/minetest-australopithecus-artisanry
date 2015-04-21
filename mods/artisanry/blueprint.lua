@@ -50,7 +50,7 @@ end
 
 --- Gets the input for this Blueprint.
 --
--- @return The input of this Blueprint, a 2D array with 5 rows and columns.
+-- @return The input of this Blueprint, a 2D array..
 function Blueprint:get_input()
 	return self.input
 end

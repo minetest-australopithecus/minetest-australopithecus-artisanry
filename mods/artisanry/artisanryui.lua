@@ -212,8 +212,8 @@ function ArtisanryUI.update_inventory(player)
 		
 		local inventory = player:get_inventory()
 		local input = inventory:get_list("artisanry-input")
-		input = artisanryutil.flat_to_grid(input)
-		input = artisanryutil.convert(input)
+		local input_grid = artisanryutil.flat_to_grid(input)
+		local converted_input = artisanryutil.convert(input_grid)
 		
 		for index = 1, 25, 1 do
 			local item_difference = difference[index]
@@ -222,8 +222,31 @@ function ArtisanryUI.update_inventory(player)
 				local blueprints = ArtisanryUI.artisanry:get_blueprints_from_output(item_difference.id)
 				
 				blueprints:foreach(function(blueprint)
-					if blueprint:match(input) then
-						-- TODO Reduce input inventory here.
+					if blueprint:match(converted_input) then
+						local start_row = arrayutil.next_matching_row(input_grid, nil, function(item)
+							return not artisanryutil.is_empty_item(item)
+						end)
+						local start_column = arrayutil.next_matching_column(input_grid, nil, function(item)
+							return not artisanryutil.is_empty_item(item)
+						end)
+						
+						local blueprint_input = blueprint:get_input()
+						
+						for row_index = start_row, start_row + #blueprint_input - 1, 1 do
+							local blueprint_row = blueprint_input[row_index - start_row + 1]
+							
+							for column_index = start_column, start_column + #blueprint_row - 1, 1 do
+								local inventory_index = (row_index - 1) * 5 + column_index
+								
+								local current_stack = input_grid[row_index][column_index]
+								local blueprint_stack = blueprint_row[column_index - start_column + 1]
+								
+								current_stack:set_count(current_stack:get_count() - blueprint_stack:get_count())
+								
+								inventory:set_stack("artisanry-input", inventory_index, current_stack)
+								
+							end
+						end
 					end
 				end)
 			end
