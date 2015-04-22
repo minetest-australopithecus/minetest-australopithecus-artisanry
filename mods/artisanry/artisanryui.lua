@@ -30,7 +30,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ArtisanryUI = {
 	artisanry = nil,
 	formspec = "",
-	hashes = {}
+	hashes = {},
+	last_blueprints_cache = {}
 }
 
 
@@ -157,6 +158,8 @@ function ArtisanryUI.replace_inventory(player)
 	player:get_inventory():set_size("artisanry-input", 25)
 	player:get_inventory():set_size("artisanry-output", 25)
 	player:set_inventory_formspec(ArtisanryUI.formspec)
+	
+	ArtisanryUI.last_blueprints_cache[player:get_player_name()] = List:new()
 end
 
 --- Updates the inventories of all connected players.
@@ -175,8 +178,11 @@ function ArtisanryUI.update_from_input_inventory(player)
 	local input = inventory:get_list("artisanry-input")
 	local index = 1
 	
-	if not artisanryutil.is_empty_stacks(input) then
-		local result = minetest.get_craft_result({
+	if not artisanryutil.is_empty_stacks(input) then	
+		local blueprints = ArtisanryUI.last_blueprints_cache[player:get_player_name()]
+		blueprints:clear()
+		
+		local result, decremented_input = minetest.get_craft_result({
 			method = "normal",
 			width = 5,
 			items = input
@@ -184,14 +190,20 @@ function ArtisanryUI.update_from_input_inventory(player)
 		
 		if not result.item:is_empty() then
 			inventory:set_stack("artisanry-output", index, result.item)
+			blueprints:add({
+				decremented_input = decremented_input,
+				result = result
+			})
+			
 			index = index + 1
 		end
 		
 		input = artisanryutil.flat_to_grid(input)
 		
-		ArtisanryUI.artisanry:get_blueprints(input):foreach(function(value)
-			inventory:set_stack("artisanry-output", index, value.result)
-		
+		ArtisanryUI.artisanry:get_blueprints(input):foreach(function(blueprint)
+			inventory:set_stack("artisanry-output", index, blueprint.result)
+			blueprints:add(blueprint)
+			
 			index = index + 1
 		end)
 	end
@@ -236,10 +248,13 @@ function ArtisanryUI.update_from_output_inventory(player)
 		local item_difference = difference[index]
 		
 		if item_difference.count < 0 then
-			local blueprints = ArtisanryUI.artisanry:get_blueprints_from_output(item_difference.id)
+			local blueprints = ArtisanryUI.last_blueprints_cache[player:get_player_name()]
 			
 			blueprints:foreach(function(blueprint)
-				if blueprint:match(converted_input) then
+				if blueprint.decremented_input ~= nil then
+					inventory:set_list("artisanry-input", blueprint.decremented_input.items)
+					return
+				elseif minetest.get_content_id(blueprint:get_result():get_name()) == item_difference.id then
 					local start_row = arrayutil.next_matching_row(input_grid, nil, function(item)
 						return not artisanryutil.is_empty_item(item)
 					end)
