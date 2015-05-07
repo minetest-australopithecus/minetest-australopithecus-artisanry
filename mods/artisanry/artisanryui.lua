@@ -80,8 +80,8 @@ function ArtisanryUI.build_formspec()
 	
 	for y = 4, 0, -1 do
 		for x = 0, 4, 1 do
-			input_background = input_background .. "background[" .. x .. "," .. y .. ";3,3;artisanry_light_tile.png]"
-			result_background = result_background .. "background[" .. (x + 7) .. "," .. y .. ";3,3;artisanry_dark_tile.png]"
+			input_background = input_background .. "background[" .. x .. "," .. y .. ";3,3;artisanry_craft_bg.png]"
+			result_background = result_background .. "background[" .. (x + 7) .. "," .. y .. ";3,3;artisanry_output_bg.png]"
 		end
 	end
 	
@@ -89,12 +89,12 @@ function ArtisanryUI.build_formspec()
 	
 	for y = 9, 7, -1 do
 		for x = 2, 9, 1 do
-			inventory_background = inventory_background .. "background[" .. x .. "," .. y .. ";3,3;artisanry_light_tile.png]"
+			inventory_background = inventory_background .. "background[" .. x .. "," .. y .. ";3,3;artisanry_inventory_bg.png]"
 		end
 	end
 	
 	for x = 2, 9, 1 do
-			inventory_background = inventory_background .. "background[" .. x .. ",6;3,3;artisanry_light_tile.png]"
+			inventory_background = inventory_background .. "background[" .. x .. ",6;3,3;artisanry_inventory_bg.png]"
 	end
 	
 	local input = "list[current_player;artisanry-input;1,1;5,5;]"
