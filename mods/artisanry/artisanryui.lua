@@ -45,7 +45,7 @@ ArtisanryUI = {
 --                 the inventories and crafting tables or all players is updated
 --                 in this interval.
 function ArtisanryUI.activate(artisanry, interval)
-	interval = interval or 0.123
+	interval = interval or 0.125
 	
 	ArtisanryUI.artisanry = artisanry
 	ArtisanryUI.formspec = ArtisanryUI.build_formspec()
@@ -56,15 +56,7 @@ function ArtisanryUI.activate(artisanry, interval)
 		ArtisanryUI.replace_inventory(player)
 	end)
 	
-	local timer = 0
-	minetest.register_globalstep(function(elapsed_time)
-		timer = timer + elapsed_time;
-		if timer >= interval then
-			timer = 0
-			
-			ArtisanryUI.update_inventories()
-		end
-	end)
+	scheduler.schedule("ArtisanryUI", interval, ArtisanryUI.update_inventories)
 end
 
 --- Builds the formspec for the ArtisanryUI inventory.
