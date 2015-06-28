@@ -85,17 +85,22 @@
     </tr>
 
     <tr>
-    <td class="name" nowrap><a href="#ArtisanryUI.build_formspec">ArtisanryUI.build_formspec</a>&nbsp;()</td>
+    <td class="name" nowrap><a href="#ArtisanryUI.build_formspec">ArtisanryUI.build_formspec</a>&nbsp;(player)</td>
     <td class="summary">Builds the formspec for the ArtisanryUI inventory.</td>
     </tr>
 
     <tr>
-    <td class="name" nowrap><a href="#ArtisanryUI.has_changed">ArtisanryUI.has_changed</a>&nbsp;(player, inventory_name)</td>
+    <td class="name" nowrap><a href="#ArtisanryUI.create_output_inventory">ArtisanryUI.create_output_inventory</a>&nbsp;()</td>
+    <td class="summary">Creates a detached inventory that is used as output fields.</td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#ArtisanryUI.has_changed">ArtisanryUI.has_changed</a>&nbsp;(player, inventory, inventory_name)</td>
     <td class="summary">Checks if the inventory has changed compared to the saved hash.</td>
     </tr>
 
     <tr>
-    <td class="name" nowrap><a href="#ArtisanryUI.put_hash">ArtisanryUI.put_hash</a>&nbsp;(player, inventory_name)</td>
+    <td class="name" nowrap><a href="#ArtisanryUI.put_hash">ArtisanryUI.put_hash</a>&nbsp;(player, inventory, inventory_name)</td>
     <td class="summary">Puts the hash of the inventory, for using it later.</td>
     </tr>
 
@@ -107,6 +112,16 @@
     <tr>
     <td class="name" nowrap><a href="#ArtisanryUI.replace_inventory">ArtisanryUI.replace_inventory</a>&nbsp;(player)</td>
     <td class="summary">Replaces the inventory of the given player with the ArtisanryUI one.</td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#ArtisanryUI.update_from_input_inventory">ArtisanryUI.update_from_input_inventory</a>&nbsp;(player)</td>
+    <td class="summary">Updates from the input inventory of the given player.</td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#ArtisanryUI.update_from_output_inventory">ArtisanryUI.update_from_output_inventory</a>&nbsp;(player)</td>
+    <td class="summary">Updates from the output inventory of the given player.</td>
     </tr>
 
     <tr>
@@ -167,10 +182,19 @@ Activates the ArtinsaryUI.  This function replaces all inventories of all curren
 
 
 
-<dt><a name="ArtisanryUI.build_formspec"></a><strong>ArtisanryUI.build_formspec</strong>&nbsp;()</dt>
+<dt><a name="ArtisanryUI.build_formspec"></a><strong>ArtisanryUI.build_formspec</strong>&nbsp;(player)</dt>
 <dd>
 Builds the formspec for the ArtisanryUI inventory. 
 
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  player: The player.
+	</li>
+	
+</ul>
 
 
 
@@ -187,7 +211,27 @@ The formspec for the inventory.
 
 
 
-<dt><a name="ArtisanryUI.has_changed"></a><strong>ArtisanryUI.has_changed</strong>&nbsp;(player, inventory_name)</dt>
+<dt><a name="ArtisanryUI.create_output_inventory"></a><strong>ArtisanryUI.create_output_inventory</strong>&nbsp;()</dt>
+<dd>
+Creates a detached inventory that is used as output fields. 
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+The detached inventory suitable for output fields.
+
+
+
+</dd>
+
+
+
+
+<dt><a name="ArtisanryUI.has_changed"></a><strong>ArtisanryUI.has_changed</strong>&nbsp;(player, inventory, inventory_name)</dt>
 <dd>
 Checks if the inventory has changed compared to the saved hash. 
 
@@ -197,6 +241,10 @@ Checks if the inventory has changed compared to the saved hash.
 	
 	<li>
 	  player: The Player object that owns the inventory.
+	</li>
+	
+	<li>
+	  inventory: The inventory object.
 	</li>
 	
 	<li>
@@ -220,7 +268,7 @@ true if the inventory has changed since the last check. Also true if there is no
 
 
 
-<dt><a name="ArtisanryUI.put_hash"></a><strong>ArtisanryUI.put_hash</strong>&nbsp;(player, inventory_name)</dt>
+<dt><a name="ArtisanryUI.put_hash"></a><strong>ArtisanryUI.put_hash</strong>&nbsp;(player, inventory, inventory_name)</dt>
 <dd>
 Puts the hash of the inventory, for using it later. 
 
@@ -230,6 +278,10 @@ Puts the hash of the inventory, for using it later.
 	
 	<li>
 	  player: The Player object that owns the inventory.
+	</li>
+	
+	<li>
+	  inventory: The inventory object.
 	</li>
 	
 	<li>
@@ -277,6 +329,58 @@ Replaces the inventory of the given player with the ArtisanryUI one.
 	
 	<li>
 	  player: The player for which to replace the inventory.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="ArtisanryUI.update_from_input_inventory"></a><strong>ArtisanryUI.update_from_input_inventory</strong>&nbsp;(player)</dt>
+<dd>
+Updates from the input inventory of the given player. 
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  player: The player for which to update the inventories.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="ArtisanryUI.update_from_output_inventory"></a><strong>ArtisanryUI.update_from_output_inventory</strong>&nbsp;(player)</dt>
+<dd>
+Updates from the output inventory of the given player. 
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  player: The player for which to update the inventories.
 	</li>
 	
 </ul>
