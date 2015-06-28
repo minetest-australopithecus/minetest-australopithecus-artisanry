@@ -94,7 +94,20 @@ function ArtisanryUI.build_formspec(player)
 	local result = "list[detached:ArtisanryUI;" .. player:get_player_name() .. ";8,1;5,5;]"
 	local inventory = "list[current_player;main;3,7;8,4;]"
 	
-	local formspec = window .. input_background .. result_background .. inventory_background .. input .. result .. inventory
+	local ring = "listring[current_player;main]"
+	ring = ring .. "listring[current_player;artisanry-input]"
+	ring = ring .. "listring[current_player;main]"
+	ring = ring .. "listring[detached:ArtisanryUI;" .. player:get_player_name() .. "]"
+	ring = ring .. "listring[current_player;main]"
+	
+	local formspec = window
+		.. input_background
+		.. result_background
+		.. inventory_background
+		.. input
+		.. result
+		.. inventory
+		.. ring
 	
 	return formspec
 end
