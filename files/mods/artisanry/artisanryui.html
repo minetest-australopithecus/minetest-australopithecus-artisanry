@@ -80,7 +80,7 @@
 <table class="function_list">
 
     <tr>
-    <td class="name" nowrap><a href="#ArtisanryUI.activate">ArtisanryUI.activate</a>&nbsp;(artisanry, interval)</td>
+    <td class="name" nowrap><a href="#ArtisanryUI.activate">ArtisanryUI.activate</a>&nbsp;(artisanry)</td>
     <td class="summary">Activates the ArtinsaryUI.</td>
     </tr>
 
@@ -90,17 +90,17 @@
     </tr>
 
     <tr>
-    <td class="name" nowrap><a href="#ArtisanryUI.create_output_inventory">ArtisanryUI.create_output_inventory</a>&nbsp;()</td>
-    <td class="summary">Creates a detached inventory that is used as output fields.</td>
+    <td class="name" nowrap><a href="#ArtisanryUI.create_inventory">ArtisanryUI.create_inventory</a>&nbsp;()</td>
+    <td class="summary">Creates a detached inventory that is used.</td>
     </tr>
 
     <tr>
-    <td class="name" nowrap><a href="#ArtisanryUI.has_changed">ArtisanryUI.has_changed</a>&nbsp;(player, inventory, inventory_name)</td>
+    <td class="name" nowrap><a href="#ArtisanryUI.has_changed">ArtisanryUI.has_changed</a>&nbsp;(player, inventory_name)</td>
     <td class="summary">Checks if the inventory has changed compared to the saved hash.</td>
     </tr>
 
     <tr>
-    <td class="name" nowrap><a href="#ArtisanryUI.put_hash">ArtisanryUI.put_hash</a>&nbsp;(player, inventory, inventory_name)</td>
+    <td class="name" nowrap><a href="#ArtisanryUI.put_hash">ArtisanryUI.put_hash</a>&nbsp;(player, inventory_name)</td>
     <td class="summary">Puts the hash of the inventory, for using it later.</td>
     </tr>
 
@@ -122,11 +122,6 @@
     <tr>
     <td class="name" nowrap><a href="#ArtisanryUI.update_from_output_inventory">ArtisanryUI.update_from_output_inventory</a>&nbsp;(player)</td>
     <td class="summary">Updates from the output inventory of the given player.</td>
-    </tr>
-
-    <tr>
-    <td class="name" nowrap><a href="#ArtisanryUI.update_inventories">ArtisanryUI.update_inventories</a>&nbsp;()</td>
-    <td class="summary">Updates the inventories of all connected players.</td>
     </tr>
 
     <tr>
@@ -152,7 +147,7 @@
 
 
 
-<dt><a name="ArtisanryUI.activate"></a><strong>ArtisanryUI.activate</strong>&nbsp;(artisanry, interval)</dt>
+<dt><a name="ArtisanryUI.activate"></a><strong>ArtisanryUI.activate</strong>&nbsp;(artisanry)</dt>
 <dd>
 Activates the ArtinsaryUI.  This function replaces all inventories of all currently coneccted players and also registers a callback to replace the inventory of every new player. 
 
@@ -162,10 +157,6 @@ Activates the ArtinsaryUI.  This function replaces all inventories of all curren
 	
 	<li>
 	  artisanry: The Artisanry instance to use.
-	</li>
-	
-	<li>
-	  interval: Optional. The interval which is used by the system, the inventories and crafting tables or all players is updated in this interval.
 	</li>
 	
 </ul>
@@ -211,9 +202,9 @@ The formspec for the inventory.
 
 
 
-<dt><a name="ArtisanryUI.create_output_inventory"></a><strong>ArtisanryUI.create_output_inventory</strong>&nbsp;()</dt>
+<dt><a name="ArtisanryUI.create_inventory"></a><strong>ArtisanryUI.create_inventory</strong>&nbsp;()</dt>
 <dd>
-Creates a detached inventory that is used as output fields. 
+Creates a detached inventory that is used. 
 
 
 
@@ -222,7 +213,7 @@ Creates a detached inventory that is used as output fields.
 
 
 <h3>Return value:</h3>
-The detached inventory suitable for output fields.
+The detached inventory.
 
 
 
@@ -231,7 +222,7 @@ The detached inventory suitable for output fields.
 
 
 
-<dt><a name="ArtisanryUI.has_changed"></a><strong>ArtisanryUI.has_changed</strong>&nbsp;(player, inventory, inventory_name)</dt>
+<dt><a name="ArtisanryUI.has_changed"></a><strong>ArtisanryUI.has_changed</strong>&nbsp;(player, inventory_name)</dt>
 <dd>
 Checks if the inventory has changed compared to the saved hash. 
 
@@ -241,10 +232,6 @@ Checks if the inventory has changed compared to the saved hash.
 	
 	<li>
 	  player: The Player object that owns the inventory.
-	</li>
-	
-	<li>
-	  inventory: The inventory object.
 	</li>
 	
 	<li>
@@ -268,7 +255,7 @@ true if the inventory has changed since the last check. Also true if there is no
 
 
 
-<dt><a name="ArtisanryUI.put_hash"></a><strong>ArtisanryUI.put_hash</strong>&nbsp;(player, inventory, inventory_name)</dt>
+<dt><a name="ArtisanryUI.put_hash"></a><strong>ArtisanryUI.put_hash</strong>&nbsp;(player, inventory_name)</dt>
 <dd>
 Puts the hash of the inventory, for using it later. 
 
@@ -278,10 +265,6 @@ Puts the hash of the inventory, for using it later.
 	
 	<li>
 	  player: The Player object that owns the inventory.
-	</li>
-	
-	<li>
-	  inventory: The inventory object.
 	</li>
 	
 	<li>
@@ -384,23 +367,6 @@ Updates from the output inventory of the given player.
 	</li>
 	
 </ul>
-
-
-
-
-
-
-
-
-</dd>
-
-
-
-
-<dt><a name="ArtisanryUI.update_inventories"></a><strong>ArtisanryUI.update_inventories</strong>&nbsp;()</dt>
-<dd>
-Updates the inventories of all connected players.
-
 
 
 
