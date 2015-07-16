@@ -80,12 +80,17 @@
 <table class="function_list">
 
     <tr>
+    <td class="name" nowrap><a href="#Blueprint:count">Blueprint:count</a>&nbsp;(input)</td>
+    <td class="summary">Gets the count how often this output can be produced from the given input.</td>
+    </tr>
+
+    <tr>
     <td class="name" nowrap><a href="#Blueprint:get_input">Blueprint:get_input</a>&nbsp;()</td>
     <td class="summary">Gets the input for this Blueprint.</td>
     </tr>
 
     <tr>
-    <td class="name" nowrap><a href="#Blueprint:get_result">Blueprint:get_result</a>&nbsp;()</td>
+    <td class="name" nowrap><a href="#Blueprint:get_result">Blueprint:get_result</a>&nbsp;(input)</td>
     <td class="summary">Gets the result for this Blueprint.</td>
     </tr>
 
@@ -117,6 +122,35 @@
 
 
 
+<dt><a name="Blueprint:count"></a><strong>Blueprint:count</strong>&nbsp;(input)</dt>
+<dd>
+Gets the count how often this output can be produced from the given input. The input must match. 
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  input: The input, already matched against this Blueprint.
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+The count how often this output can be produced.
+
+
+
+</dd>
+
+
+
+
 <dt><a name="Blueprint:get_input"></a><strong>Blueprint:get_input</strong>&nbsp;()</dt>
 <dd>
 Gets the input for this Blueprint. 
@@ -137,10 +171,19 @@ The input of this Blueprint, a 2D array..
 
 
 
-<dt><a name="Blueprint:get_result"></a><strong>Blueprint:get_result</strong>&nbsp;()</dt>
+<dt><a name="Blueprint:get_result"></a><strong>Blueprint:get_result</strong>&nbsp;(input)</dt>
 <dd>
 Gets the result for this Blueprint. 
 
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  input: Optional. The input stack, will be used to determine the count of the result.
+	</li>
+	
+</ul>
 
 
 
