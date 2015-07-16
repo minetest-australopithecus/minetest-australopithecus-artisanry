@@ -31,7 +31,8 @@ ArtisanryUI = {
 	artisanry = nil,
 	hashes = {},
 	last_blueprints_cache = {},
-	inventory = nil
+	inventory = nil,
+	output_size = 7 * 5
 }
 
 
@@ -57,17 +58,23 @@ end
 -- @param player The player.
 -- @return The formspec for the inventory.
 function ArtisanryUI.build_formspec(player)
-	local window = "size[14,12;]"
+	local window = "size[15,12;]"
 	window = window .. "bgcolor[#00000000;true]"
 	window = window .. "listcolors[#00000000;#FFFFFF33]"
 	
 	local input_background = ""
-	local result_background = ""
 	
 	for y = 4, 0, -1 do
 		for x = 0, 4, 1 do
 			input_background = input_background .. "background[" .. x .. "," .. y .. ";3,3;artisanry_craft_bg.png]"
-			result_background = result_background .. "background[" .. (x + 7) .. "," .. y .. ";3,3;artisanry_output_bg.png]"
+		end
+	end
+	
+	local result_background = ""
+	
+	for y = 4, 0, -1 do
+		for x = 0, 6, 1 do
+			result_background = result_background .. "background[" .. (x + 6) .. "," .. y .. ";3,3;artisanry_output_bg.png]"
 		end
 	end
 	
@@ -84,7 +91,7 @@ function ArtisanryUI.build_formspec(player)
 	end
 	
 	local input = "list[detached:ArtisanryUI;" .. player:get_player_name() .. "-input;1,1;5,5;]"
-	local result = "list[detached:ArtisanryUI;" .. player:get_player_name() .. "-output;8,1;5,5;]"
+	local result = "list[detached:ArtisanryUI;" .. player:get_player_name() .. "-output;7,1;7,5;]"
 	local inventory = "list[current_player;main;3,7;8,4;]"
 	
 	local ring = "listring[current_player;main]"
@@ -189,8 +196,8 @@ end
 --
 -- @param player The player for which to replace the inventory.
 function ArtisanryUI.replace_inventory(player)
-	ArtisanryUI.inventory:set_size(player:get_player_name() .. "-input", 25)
-	ArtisanryUI.inventory:set_size(player:get_player_name() .. "-output", 25)
+	ArtisanryUI.inventory:set_size(player:get_player_name() .. "-input", 5 * 5)
+	ArtisanryUI.inventory:set_size(player:get_player_name() .. "-output", ArtisanryUI.output_size)
 	
 	player:set_inventory_formspec(ArtisanryUI.build_formspec(player))
 	
@@ -254,7 +261,7 @@ function ArtisanryUI.update_from_input_inventory(player)
 		end)
 	end
 	
-	while index <= 25 do
+	while index <= ArtisanryUI.output_size do
 		ArtisanryUI.inventory:set_stack(player:get_player_name() .. "-output", index, nil)
 		index = index + 1
 	end
@@ -271,7 +278,7 @@ function ArtisanryUI.update_from_output_inventory(player)
 	local input_grid = artisanryutil.flat_to_grid(input)
 	local converted_input = artisanryutil.convert(input_grid)
 	
-	for index = 1, 25, 1 do
+	for index = 1, ArtisanryUI.output_size, 1 do
 		local item_difference = difference[index]
 		
 		-- Difference must be negative.
