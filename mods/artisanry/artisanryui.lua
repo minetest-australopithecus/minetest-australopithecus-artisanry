@@ -247,7 +247,7 @@ function ArtisanryUI.update_from_input_inventory(player)
 		input = artisanryutil.flat_to_grid(input)
 		
 		ArtisanryUI.artisanry:get_blueprints(input):foreach(function(blueprint)
-			ArtisanryUI.inventory:set_stack(player:get_player_name() .. "-output", index, blueprint.result)
+			ArtisanryUI.inventory:set_stack(player:get_player_name() .. "-output", index, blueprint:get_result())
 			blueprints:add(blueprint)
 			
 			index = index + 1
@@ -274,6 +274,7 @@ function ArtisanryUI.update_from_output_inventory(player)
 	for index = 1, 25, 1 do
 		local item_difference = difference[index]
 		
+		-- Difference must be negative.
 		if item_difference.count < 0 then
 			local blueprints = ArtisanryUI.last_blueprints_cache[player:get_player_name()]
 			

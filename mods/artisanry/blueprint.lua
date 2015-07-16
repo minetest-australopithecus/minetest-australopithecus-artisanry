@@ -48,6 +48,36 @@ function Blueprint:new(result, input)
 end
 
 
+--- Gets the count how often this output can be produced from the given
+-- input. The input must match.
+--
+-- @param input The input, already matched against this Blueprint.
+-- @return The count how often this output can be produced.
+function Blueprint:count(input)
+	local count = 999
+	
+	local reduced_input = artisanryutil.convert(input)
+	
+	for row_index = 1, #self.input, 1 do
+		local blueprint_row = self.input[row_index]
+		local input_row = reduced_input[row_index]
+		
+		for column_index = 1, #blueprint_row, 1 do
+			local blueprint_part = blueprint_row[column_index]
+			local input_part = input_row[column_index]
+			
+			local item_count = input_part:get_count() / blueprint_part:get_count()
+			item_count = math.floor(item_count)
+			
+			if item_count < count then
+				count = item_count
+			end
+		end
+	end
+	
+	return count
+end
+
 --- Gets the input for this Blueprint.
 --
 -- @return The input of this Blueprint, a 2D array..
@@ -57,9 +87,17 @@ end
 
 --- Gets the result for this Blueprint.
 --
+-- @param input Optional. The input stack, will be used to determine
+--              the count of the result.
 -- @return The result, an ItemStack.
-function Blueprint:get_result()
-	return self.result
+function Blueprint:get_result(input)
+	local cloned_result = ItemStack(self.result)
+	
+	if input ~= nil then
+		cloned_result:set_count(self:count(input))
+	end
+	
+	return cloned_result
 end
 
 --- Matches this blueprint against the given input.
