@@ -125,7 +125,7 @@
     </tr>
 
     <tr>
-    <td class="name" nowrap><a href="#ArtisanryUI.update_inventory">ArtisanryUI.update_inventory</a>&nbsp;(player)</td>
+    <td class="name" nowrap><a href="#ArtisanryUI.update_inventory">ArtisanryUI.update_inventory</a>&nbsp;(player, force_update)</td>
     <td class="summary">Updates the inventory of the given player.</td>
     </tr>
 
@@ -380,7 +380,7 @@ Updates from the output inventory of the given player.
 
 
 
-<dt><a name="ArtisanryUI.update_inventory"></a><strong>ArtisanryUI.update_inventory</strong>&nbsp;(player)</dt>
+<dt><a name="ArtisanryUI.update_inventory"></a><strong>ArtisanryUI.update_inventory</strong>&nbsp;(player, force_update)</dt>
 <dd>
 Updates the inventory of the given player. 
 
@@ -390,6 +390,10 @@ Updates the inventory of the given player.
 	
 	<li>
 	  player: The player for which to update the inventory.
+	</li>
+	
+	<li>
+	  force_update: Optional. If an update should be forced.
 	</li>
 	
 </ul>

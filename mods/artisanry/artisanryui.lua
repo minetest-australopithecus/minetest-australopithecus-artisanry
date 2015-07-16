@@ -32,7 +32,8 @@ ArtisanryUI = {
 	hashes = {},
 	last_blueprints_cache = {},
 	inventory = nil,
-	output_size = 7 * 5
+	output_size = 7 * 5,
+	pages = {}
 }
 
 
@@ -48,9 +49,8 @@ function ArtisanryUI.activate(artisanry)
 	
 	ArtisanryUI.replace_inventories()
 	
-	minetest.register_on_joinplayer(function(player)
-		ArtisanryUI.replace_inventory(player)
-	end)
+	minetest.register_on_joinplayer(ArtisanryUI.replace_inventory)
+	minetest.register_on_player_receive_fields(ArtisanryUI.scroll_page)
 end
 
 --- Builds the formspec for the ArtisanryUI inventory.
@@ -92,6 +92,10 @@ function ArtisanryUI.build_formspec(player)
 	
 	local input = "list[detached:ArtisanryUI;" .. player:get_player_name() .. "-input;1,1;5,5;]"
 	local result = "list[detached:ArtisanryUI;" .. player:get_player_name() .. "-output;7,1;7,5;]"
+	
+	local previous_button = "button[7,6;2,1;artisanry-" .. player:get_player_name() .. "-previous-page;<<]"
+	local next_button = "button[12,6;2,1;artisanry-" .. player:get_player_name() .. "-next-page;>>]"
+	
 	local inventory = "list[current_player;main;3,7;8,4;]"
 	
 	local ring = "listring[current_player;main]"
@@ -103,6 +107,8 @@ function ArtisanryUI.build_formspec(player)
 	local formspec = window
 		.. input_background
 		.. result_background
+		.. previous_button
+		.. next_button
 		.. inventory_background
 		.. input
 		.. result
@@ -202,13 +208,38 @@ function ArtisanryUI.replace_inventory(player)
 	player:set_inventory_formspec(ArtisanryUI.build_formspec(player))
 	
 	ArtisanryUI.last_blueprints_cache[player:get_player_name()] = List:new()
+	
+	ArtisanryUI.pages[player:get_player_name()] = {
+		current = 1,
+		max = 1
+	}
+end
+
+function ArtisanryUI.scroll_page(player, formname, fields)
+	if fields["artisanry-" .. player:get_player_name() .. "-next-page"] ~= nil then
+		local pages = ArtisanryUI.pages[player:get_player_name()]
+		pages.current = math.min(pages.current + 1, pages.max)
+		
+		ArtisanryUI.update_inventory(player, true)
+	elseif fields["artisanry-" .. player:get_player_name() .. "-previous-page"] ~= nil then
+		local pages = ArtisanryUI.pages[player:get_player_name()]
+		pages.current = math.max(pages.current - 1, 1)
+		
+		ArtisanryUI.update_inventory(player, true)
+	end
 end
 
 --- Updates the inventory of the given player.
 --
 -- @param player The player for which to update the inventory.
-function ArtisanryUI.update_inventory(player)
-	if ArtisanryUI.has_changed(player, "input") then
+-- @param force_update Optional. If an update should be forced.
+function ArtisanryUI.update_inventory(player, force_update)
+	if ArtisanryUI.has_changed(player, "input") or force_update then
+		-- If the input has changed on its own, we'll reset the page.
+		if not force_update then
+			ArtisanryUI.pages[player:get_player_name()].current = 1
+		end
+		
 		ArtisanryUI.update_from_input_inventory(player)
 		
 		ArtisanryUI.put_hash(player, "input")
@@ -231,9 +262,11 @@ function ArtisanryUI.update_from_input_inventory(player)
 	local input = ArtisanryUI.inventory:get_list(player:get_player_name() .. "-input")
 	local index = 1
 	
-	if not artisanryutil.is_empty_stacks(input) then	
+	if not artisanryutil.is_empty_stacks(input) then
 		local blueprints = ArtisanryUI.last_blueprints_cache[player:get_player_name()]
 		blueprints:clear()
+		
+		local page = ArtisanryUI.pages[player:get_player_name()]
 		
 		local result, decremented_input = minetest.get_craft_result({
 			method = "normal",
@@ -241,7 +274,7 @@ function ArtisanryUI.update_from_input_inventory(player)
 			items = input
 		})
 		
-		if not result.item:is_empty() then
+		if not result.item:is_empty() and page.current == 1 then
 			ArtisanryUI.inventory:set_stack(player:get_player_name() .. "-output", index, result.item)
 			blueprints:add({
 				decremented_input = decremented_input,
@@ -253,7 +286,12 @@ function ArtisanryUI.update_from_input_inventory(player)
 		
 		input = artisanryutil.flat_to_grid(input)
 		
-		ArtisanryUI.artisanry:get_blueprints(input):foreach(function(blueprint)
+		local start_index = (page.current - 1) * ArtisanryUI.output_size
+		local output_blueprints = ArtisanryUI.artisanry:get_blueprints(input)
+		
+		page.max = math.ceil(output_blueprints:size() / ArtisanryUI.output_size)
+		
+		output_blueprints:sub_list(start_index, ArtisanryUI.output_size):foreach(function(blueprint)
 			ArtisanryUI.inventory:set_stack(player:get_player_name() .. "-output", index, blueprint:get_result())
 			blueprints:add(blueprint)
 			
