@@ -9,7 +9,7 @@ clean:
 
 .PHONY: doc
 doc:
-	luadoc -d $(doc) mods/artisanry
+	ldoc --dir=$(doc) mods/artisanry
 
 .SILENT .PHONY: test
 test: $(test)/*.lua
