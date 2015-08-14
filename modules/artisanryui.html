@@ -1,0 +1,335 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../modules/artisanry.html">artisanry</a></li>
+  <li><a href="../modules/blueprint.html">blueprint</a></li>
+  <li><a href="../modules/artisanryutil.html">artisanryutil</a></li>
+  <li><strong>artisanryui</strong></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>artisanryui</code></h1>
+<p>ArtisanryUI is a static, global object that allows to replace the inventory
+ with the Artisanry one.</p>
+<p></p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#ArtisanryUI.activate">ArtisanryUI.activate (artisanry)</a></td>
+	<td class="summary">Activates the ArtinsaryUI.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ArtisanryUI.build_formspec">ArtisanryUI.build_formspec (player)</a></td>
+	<td class="summary">Builds the formspec for the ArtisanryUI inventory.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ArtisanryUI.create_inventory">ArtisanryUI.create_inventory ()</a></td>
+	<td class="summary">Creates a detached inventory that is used.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ArtisanryUI.has_changed">ArtisanryUI.has_changed (player, inventory_name)</a></td>
+	<td class="summary">Checks if the inventory has changed compared to the saved hash.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ArtisanryUI.put_hash">ArtisanryUI.put_hash (player, inventory_name)</a></td>
+	<td class="summary">Puts the hash of the inventory, for using it later.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ArtisanryUI.replace_inventories">ArtisanryUI.replace_inventories ()</a></td>
+	<td class="summary">Replaces the inventory of every currently connected player with
+ the ArtisanryUI one.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ArtisanryUI.replace_inventory">ArtisanryUI.replace_inventory (player)</a></td>
+	<td class="summary">Replaces the inventory of the given player with the ArtisanryUI one.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ArtisanryUI.update_inventory">ArtisanryUI.update_inventory (player, force_update)</a></td>
+	<td class="summary">Updates the inventory of the given player.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ArtisanryUI.update_from_input_inventory">ArtisanryUI.update_from_input_inventory (player)</a></td>
+	<td class="summary">Updates from the input inventory of the given player.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ArtisanryUI.update_from_output_inventory">ArtisanryUI.update_from_output_inventory (player)</a></td>
+	<td class="summary">Updates from the output inventory of the given player.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2><a name="Functions"></a>Functions</h2>
+    <dl class="function">
+    <dt>
+    <a name = "ArtisanryUI.activate"></a>
+    <strong>ArtisanryUI.activate (artisanry)</strong>
+    </dt>
+    <dd>
+    Activates the ArtinsaryUI.
+<p> This function replaces all inventories of all currently coneccted players
+ and also registers a callback to replace the inventory of every new player.
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">artisanry</span>
+         The Artisanry instance to use.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ArtisanryUI.build_formspec"></a>
+    <strong>ArtisanryUI.build_formspec (player)</strong>
+    </dt>
+    <dd>
+    Builds the formspec for the ArtisanryUI inventory.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">player</span>
+         The player.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        The formspec for the inventory.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ArtisanryUI.create_inventory"></a>
+    <strong>ArtisanryUI.create_inventory ()</strong>
+    </dt>
+    <dd>
+    Creates a detached inventory that is used.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        The detached inventory.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ArtisanryUI.has_changed"></a>
+    <strong>ArtisanryUI.has_changed (player, inventory_name)</strong>
+    </dt>
+    <dd>
+    Checks if the inventory has changed compared to the saved hash.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">player</span>
+         The Player object that owns the inventory.
+        </li>
+        <li><span class="parameter">inventory_name</span>
+         The name of the inventory.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true if the inventory has changed since the last check. Also true if
+         there is no saved hash for this inventory.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ArtisanryUI.put_hash"></a>
+    <strong>ArtisanryUI.put_hash (player, inventory_name)</strong>
+    </dt>
+    <dd>
+    Puts the hash of the inventory, for using it later.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">player</span>
+         The Player object that owns the inventory.
+        </li>
+        <li><span class="parameter">inventory_name</span>
+         The name of the inventory.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ArtisanryUI.replace_inventories"></a>
+    <strong>ArtisanryUI.replace_inventories ()</strong>
+    </dt>
+    <dd>
+    Replaces the inventory of every currently connected player with
+ the ArtisanryUI one.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ArtisanryUI.replace_inventory"></a>
+    <strong>ArtisanryUI.replace_inventory (player)</strong>
+    </dt>
+    <dd>
+    Replaces the inventory of the given player with the ArtisanryUI one.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">player</span>
+         The player for which to replace the inventory.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ArtisanryUI.update_inventory"></a>
+    <strong>ArtisanryUI.update_inventory (player, force_update)</strong>
+    </dt>
+    <dd>
+    Updates the inventory of the given player.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">player</span>
+         The player for which to update the inventory.
+        </li>
+        <li><span class="parameter">force_update</span>
+         Optional. If an update should be forced.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ArtisanryUI.update_from_input_inventory"></a>
+    <strong>ArtisanryUI.update_from_input_inventory (player)</strong>
+    </dt>
+    <dd>
+    Updates from the input inventory of the given player.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">player</span>
+         The player for which to update the inventories.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ArtisanryUI.update_from_output_inventory"></a>
+    <strong>ArtisanryUI.update_from_output_inventory (player)</strong>
+    </dt>
+    <dd>
+    Updates from the output inventory of the given player.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">player</span>
+         The player for which to update the inventories.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.2</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
