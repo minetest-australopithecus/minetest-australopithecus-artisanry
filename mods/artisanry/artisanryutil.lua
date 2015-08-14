@@ -57,7 +57,7 @@ end
 --- Reduces and converts the given input to ItemStacks.
 --
 -- @param input The input to convert.
--- @param The converted input.
+-- @return The converted input.
 function artisanryutil.convert(input)
 	return artisanryutil.as_stacks(arrayutil.reduce2d(input, function(item)
 		return not artisanryutil.is_empty_item(item)
