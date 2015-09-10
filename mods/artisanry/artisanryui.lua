@@ -213,6 +213,8 @@ function ArtisanryUI.replace_inventory(player)
 		current = 1,
 		max = 1
 	}
+	
+	ArtisanryUI.update_inventory(player, true)
 end
 
 function ArtisanryUI.scroll_page(player, formname, fields)
@@ -262,42 +264,39 @@ function ArtisanryUI.update_from_input_inventory(player)
 	local input = ArtisanryUI.inventory:get_list(player:get_player_name() .. "-input")
 	local index = 1
 	
-	if not artisanryutil.is_empty_stacks(input) then
-		local blueprints = ArtisanryUI.last_blueprints_cache[player:get_player_name()]
-		blueprints:clear()
-		
-		local page = ArtisanryUI.pages[player:get_player_name()]
-		
-		local result, decremented_input = minetest.get_craft_result({
-			method = "normal",
-			width = 5,
-			items = input
+	local blueprints = ArtisanryUI.last_blueprints_cache[player:get_player_name()]
+	blueprints:clear()
+	
+	local page = ArtisanryUI.pages[player:get_player_name()]
+	local result, decremented_input = minetest.get_craft_result({
+		method = "normal",
+		width = 5,
+		items = input
+	})
+	
+	if not result.item:is_empty() and page.current == 1 then
+		ArtisanryUI.inventory:set_stack(player:get_player_name() .. "-output", index, result.item)
+		blueprints:add({
+			decremented_input = decremented_input,
+			result = result
 		})
 		
-		if not result.item:is_empty() and page.current == 1 then
-			ArtisanryUI.inventory:set_stack(player:get_player_name() .. "-output", index, result.item)
-			blueprints:add({
-				decremented_input = decremented_input,
-				result = result
-			})
-			
-			index = index + 1
-		end
-		
-		input = artisanryutil.flat_to_grid(input)
-		
-		local start_index = (page.current - 1) * ArtisanryUI.output_size
-		local output_blueprints = ArtisanryUI.artisanry:get_blueprints(input)
-		
-		page.max = math.ceil(output_blueprints:size() / ArtisanryUI.output_size)
-		
-		output_blueprints:sub_list(start_index, ArtisanryUI.output_size):foreach(function(blueprint)
-			ArtisanryUI.inventory:set_stack(player:get_player_name() .. "-output", index, blueprint:get_result())
-			blueprints:add(blueprint)
-			
-			index = index + 1
-		end)
+		index = index + 1
 	end
+	
+	input = artisanryutil.flat_to_grid(input)
+	
+	local start_index = (page.current - 1) * ArtisanryUI.output_size
+	local output_blueprints = ArtisanryUI.artisanry:get_blueprints(input)
+	
+	page.max = math.ceil(output_blueprints:size() / ArtisanryUI.output_size)
+	
+	output_blueprints:sub_list(start_index, ArtisanryUI.output_size):foreach(function(blueprint)
+		ArtisanryUI.inventory:set_stack(player:get_player_name() .. "-output", index, blueprint:get_result())
+		blueprints:add(blueprint)
+		
+		index = index + 1
+	end)
 	
 	while index <= ArtisanryUI.output_size do
 		ArtisanryUI.inventory:set_stack(player:get_player_name() .. "-output", index, nil)
