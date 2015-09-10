@@ -25,9 +25,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 --]]
 
 
---- ArtisanryUI is a static, global object that allows to replace the inventory
+--- artisanryui is a static, global object that allows to replace the inventory
 -- with the Artisanry one.
-ArtisanryUI = {
+artisanryui = {
 	artisanry = nil,
 	hashes = {},
 	last_blueprints_cache = {},
@@ -43,21 +43,21 @@ ArtisanryUI = {
 -- and also registers a callback to replace the inventory of every new player.
 --
 -- @param artisanry The Artisanry instance to use.
-function ArtisanryUI.activate(artisanry)
-	ArtisanryUI.artisanry = artisanry
-	ArtisanryUI.inventory = ArtisanryUI.create_inventory()
+function artisanryui.activate(artisanry)
+	artisanryui.artisanry = artisanry
+	artisanryui.inventory = artisanryui.create_inventory()
 	
-	ArtisanryUI.replace_inventories()
+	artisanryui.replace_inventories()
 	
-	minetest.register_on_joinplayer(ArtisanryUI.replace_inventory)
-	minetest.register_on_player_receive_fields(ArtisanryUI.scroll_page)
+	minetest.register_on_joinplayer(artisanryui.replace_inventory)
+	minetest.register_on_player_receive_fields(artisanryui.scroll_page)
 end
 
---- Builds the formspec for the ArtisanryUI inventory.
+--- Builds the formspec for the artisanryui inventory.
 --
 -- @param player The player.
 -- @return The formspec for the inventory.
-function ArtisanryUI.build_formspec(player)
+function artisanryui.build_formspec(player)
 	local window = "size[15,12;]"
 	window = window .. "bgcolor[#00000000;true]"
 	window = window .. "listcolors[#00000000;#FFFFFF33]"
@@ -90,8 +90,8 @@ function ArtisanryUI.build_formspec(player)
 			inventory_background = inventory_background .. "background[" .. x .. ",6;3,3;artisanry_inventory_bg.png]"
 	end
 	
-	local input = "list[detached:ArtisanryUI;" .. player:get_player_name() .. "-input;1,1;5,5;]"
-	local result = "list[detached:ArtisanryUI;" .. player:get_player_name() .. "-output;7,1;7,5;]"
+	local input = "list[detached:artisanryui;" .. player:get_player_name() .. "-input;1,1;5,5;]"
+	local result = "list[detached:artisanryui;" .. player:get_player_name() .. "-output;7,1;7,5;]"
 	
 	local previous_button = "button[7,6;2,1;artisanry-" .. player:get_player_name() .. "-previous-page;<<]"
 	local next_button = "button[12,6;2,1;artisanry-" .. player:get_player_name() .. "-next-page;>>]"
@@ -99,9 +99,9 @@ function ArtisanryUI.build_formspec(player)
 	local inventory = "list[current_player;main;3,7;8,4;]"
 	
 	local ring = "listring[current_player;main]"
-	ring = ring .. "listring[detached:ArtisanryUI;" .. player:get_player_name() .. "-input]"
+	ring = ring .. "listring[detached:artisanryui;" .. player:get_player_name() .. "-input]"
 	ring = ring .. "listring[current_player;main]"
-	ring = ring .. "listring[detached:ArtisanryUI;" .. player:get_player_name() .. "-output]"
+	ring = ring .. "listring[detached:artisanryui;" .. player:get_player_name() .. "-output]"
 	ring = ring .. "listring[current_player;main]"
 	
 	local formspec = window
@@ -121,8 +121,8 @@ end
 --- Creates a detached inventory that is used.
 --
 -- @return The detached inventory.
-function ArtisanryUI.create_inventory()
-	return minetest.create_detached_inventory("ArtisanryUI", {
+function artisanryui.create_inventory()
+	return minetest.create_detached_inventory("artisanryui", {
 		allow_move = function(inventory, from_list, from_index, to_list, to_index, count, player)
 			return count
 		end,
@@ -141,15 +141,15 @@ function ArtisanryUI.create_inventory()
 		end,
 		
 		on_move = function(inventory, from_list, from_index, to_list, to_index, count, player)
-			ArtisanryUI.update_inventory(player)
+			artisanryui.update_inventory(player)
 		end,
 		
 		on_put = function(inventory, listname, index, stack, player)
-			ArtisanryUI.update_inventory(player)
+			artisanryui.update_inventory(player)
 		end,
 		
 		on_take = function(inventory, listname, index, stack, player)
-			ArtisanryUI.update_inventory(player)
+			artisanryui.update_inventory(player)
 		end
 	})
 end
@@ -160,9 +160,9 @@ end
 -- @param inventory_name The name of the inventory.
 -- @return true if the inventory has changed since the last check. Also true if
 --         there is no saved hash for this inventory.
-function ArtisanryUI.has_changed(player, inventory_name)
+function artisanryui.has_changed(player, inventory_name)
 	local player_name = player:get_player_name()
-	local hashes = ArtisanryUI.hashes[player_name]
+	local hashes = artisanryui.hashes[player_name]
 	
 	if hashes == nil or hashes[inventory_name] == nil then
 		-- Return true if we don't have a hash by now to force an update.
@@ -171,63 +171,63 @@ function ArtisanryUI.has_changed(player, inventory_name)
 	
 	local hash = hashes[inventory_name]
 	
-	return not inventoryutil.equals_hash(ArtisanryUI.inventory, player:get_player_name() .. "-" .. inventory_name, hash)
+	return not inventoryutil.equals_hash(artisanryui.inventory, player:get_player_name() .. "-" .. inventory_name, hash)
 end
 
 --- Puts the hash of the inventory, for using it later.
 --
 -- @param player The Player object that owns the inventory.
 -- @param inventory_name The name of the inventory.
-function ArtisanryUI.put_hash(player, inventory_name)
+function artisanryui.put_hash(player, inventory_name)
 	local player_name = player:get_player_name()
-	local hashes = ArtisanryUI.hashes[player_name]
+	local hashes = artisanryui.hashes[player_name]
 	
 	if hashes == nil then
 		hashes = {}
-		ArtisanryUI.hashes[player_name] = hashes
+		artisanryui.hashes[player_name] = hashes
 	end
 	
-	hashes[inventory_name] = inventoryutil.hash(ArtisanryUI.inventory, player:get_player_name() .. "-" .. inventory_name)
+	hashes[inventory_name] = inventoryutil.hash(artisanryui.inventory, player:get_player_name() .. "-" .. inventory_name)
 end
 
 --- Replaces the inventory of every currently connected player with
--- the ArtisanryUI one.
-function ArtisanryUI.replace_inventories()
+-- the artisanryui one.
+function artisanryui.replace_inventories()
 	for index, player in ipairs(minetest.get_connected_players()) do
-		ArtisanryUI.replace_inventory(player)
+		artisanryui.replace_inventory(player)
 	end
 end
 
---- Replaces the inventory of the given player with the ArtisanryUI one.
+--- Replaces the inventory of the given player with the artisanryui one.
 --
 -- @param player The player for which to replace the inventory.
-function ArtisanryUI.replace_inventory(player)
-	ArtisanryUI.inventory:set_size(player:get_player_name() .. "-input", 5 * 5)
-	ArtisanryUI.inventory:set_size(player:get_player_name() .. "-output", ArtisanryUI.output_size)
+function artisanryui.replace_inventory(player)
+	artisanryui.inventory:set_size(player:get_player_name() .. "-input", 5 * 5)
+	artisanryui.inventory:set_size(player:get_player_name() .. "-output", artisanryui.output_size)
 	
-	player:set_inventory_formspec(ArtisanryUI.build_formspec(player))
+	player:set_inventory_formspec(artisanryui.build_formspec(player))
 	
-	ArtisanryUI.last_blueprints_cache[player:get_player_name()] = List:new()
+	artisanryui.last_blueprints_cache[player:get_player_name()] = List:new()
 	
-	ArtisanryUI.pages[player:get_player_name()] = {
+	artisanryui.pages[player:get_player_name()] = {
 		current = 1,
 		max = 1
 	}
 	
-	ArtisanryUI.update_inventory(player, true)
+	artisanryui.update_inventory(player, true)
 end
 
-function ArtisanryUI.scroll_page(player, formname, fields)
+function artisanryui.scroll_page(player, formname, fields)
 	if fields["artisanry-" .. player:get_player_name() .. "-next-page"] ~= nil then
-		local pages = ArtisanryUI.pages[player:get_player_name()]
+		local pages = artisanryui.pages[player:get_player_name()]
 		pages.current = math.min(pages.current + 1, pages.max)
 		
-		ArtisanryUI.update_inventory(player, true)
+		artisanryui.update_inventory(player, true)
 	elseif fields["artisanry-" .. player:get_player_name() .. "-previous-page"] ~= nil then
-		local pages = ArtisanryUI.pages[player:get_player_name()]
+		local pages = artisanryui.pages[player:get_player_name()]
 		pages.current = math.max(pages.current - 1, 1)
 		
-		ArtisanryUI.update_inventory(player, true)
+		artisanryui.update_inventory(player, true)
 	end
 end
 
@@ -235,39 +235,39 @@ end
 --
 -- @param player The player for which to update the inventory.
 -- @param force_update Optional. If an update should be forced.
-function ArtisanryUI.update_inventory(player, force_update)
-	if ArtisanryUI.has_changed(player, "input") or force_update then
+function artisanryui.update_inventory(player, force_update)
+	if artisanryui.has_changed(player, "input") or force_update then
 		-- If the input has changed on its own, we'll reset the page.
 		if not force_update then
-			ArtisanryUI.pages[player:get_player_name()].current = 1
+			artisanryui.pages[player:get_player_name()].current = 1
 		end
 		
-		ArtisanryUI.update_from_input_inventory(player)
+		artisanryui.update_from_input_inventory(player)
 		
-		ArtisanryUI.put_hash(player, "input")
-		ArtisanryUI.put_hash(player, "output")
+		artisanryui.put_hash(player, "input")
+		artisanryui.put_hash(player, "output")
 	end
 	
-	if ArtisanryUI.has_changed(player, "output") then
-		ArtisanryUI.update_from_output_inventory(player)
-		ArtisanryUI.update_from_input_inventory(player)
+	if artisanryui.has_changed(player, "output") then
+		artisanryui.update_from_output_inventory(player)
+		artisanryui.update_from_input_inventory(player)
 		
-		ArtisanryUI.put_hash(player, "input")
-		ArtisanryUI.put_hash(player, "output")
+		artisanryui.put_hash(player, "input")
+		artisanryui.put_hash(player, "output")
 	end
 end
 
 --- Updates from the input inventory of the given player.
 --
 -- @param player The player for which to update the inventories.
-function ArtisanryUI.update_from_input_inventory(player)
-	local input = ArtisanryUI.inventory:get_list(player:get_player_name() .. "-input")
+function artisanryui.update_from_input_inventory(player)
+	local input = artisanryui.inventory:get_list(player:get_player_name() .. "-input")
 	local index = 1
 	
-	local blueprints = ArtisanryUI.last_blueprints_cache[player:get_player_name()]
+	local blueprints = artisanryui.last_blueprints_cache[player:get_player_name()]
 	blueprints:clear()
 	
-	local page = ArtisanryUI.pages[player:get_player_name()]
+	local page = artisanryui.pages[player:get_player_name()]
 	local result, decremented_input = minetest.get_craft_result({
 		method = "normal",
 		width = 5,
@@ -275,7 +275,7 @@ function ArtisanryUI.update_from_input_inventory(player)
 	})
 	
 	if not result.item:is_empty() and page.current == 1 then
-		ArtisanryUI.inventory:set_stack(player:get_player_name() .. "-output", index, result.item)
+		artisanryui.inventory:set_stack(player:get_player_name() .. "-output", index, result.item)
 		blueprints:add({
 			decremented_input = decremented_input,
 			result = result
@@ -286,20 +286,20 @@ function ArtisanryUI.update_from_input_inventory(player)
 	
 	input = artisanryutil.flat_to_grid(input)
 	
-	local start_index = (page.current - 1) * ArtisanryUI.output_size
-	local output_blueprints = ArtisanryUI.artisanry:get_blueprints(input)
+	local start_index = (page.current - 1) * artisanryui.output_size
+	local output_blueprints = artisanryui.artisanry:get_blueprints(input)
 	
-	page.max = math.ceil(output_blueprints:size() / ArtisanryUI.output_size)
+	page.max = math.ceil(output_blueprints:size() / artisanryui.output_size)
 	
-	output_blueprints:sub_list(start_index, ArtisanryUI.output_size):foreach(function(blueprint)
-		ArtisanryUI.inventory:set_stack(player:get_player_name() .. "-output", index, blueprint:get_result())
+	output_blueprints:sub_list(start_index, artisanryui.output_size):foreach(function(blueprint)
+		artisanryui.inventory:set_stack(player:get_player_name() .. "-output", index, blueprint:get_result())
 		blueprints:add(blueprint)
 		
 		index = index + 1
 	end)
 	
-	while index <= ArtisanryUI.output_size do
-		ArtisanryUI.inventory:set_stack(player:get_player_name() .. "-output", index, nil)
+	while index <= artisanryui.output_size do
+		artisanryui.inventory:set_stack(player:get_player_name() .. "-output", index, nil)
 		index = index + 1
 	end
 end
@@ -307,24 +307,24 @@ end
 --- Updates from the output inventory of the given player.
 --
 -- @param player The player for which to update the inventories.
-function ArtisanryUI.update_from_output_inventory(player)
-	local output_hash = ArtisanryUI.hashes[player:get_player_name()]["output"]
-	local difference = inventoryutil.difference_hash(ArtisanryUI.inventory, player:get_player_name() .. "-output", output_hash)
+function artisanryui.update_from_output_inventory(player)
+	local output_hash = artisanryui.hashes[player:get_player_name()]["output"]
+	local difference = inventoryutil.difference_hash(artisanryui.inventory, player:get_player_name() .. "-output", output_hash)
 	
-	local input = ArtisanryUI.inventory:get_list(player:get_player_name() .. "-input")
+	local input = artisanryui.inventory:get_list(player:get_player_name() .. "-input")
 	local input_grid = artisanryutil.flat_to_grid(input)
 	local converted_input = artisanryutil.convert(input_grid)
 	
-	for index = 1, ArtisanryUI.output_size, 1 do
+	for index = 1, artisanryui.output_size, 1 do
 		local item_difference = difference[index]
 		
 		-- Difference must be negative.
 		if item_difference.count < 0 then
-			local blueprints = ArtisanryUI.last_blueprints_cache[player:get_player_name()]
+			local blueprints = artisanryui.last_blueprints_cache[player:get_player_name()]
 			
 			blueprints:foreach(function(blueprint)
 				if blueprint.decremented_input ~= nil then
-					ArtisanryUI.inventory:set_list(player:get_player_name() .. "-input", blueprint.decremented_input.items)
+					artisanryui.inventory:set_list(player:get_player_name() .. "-input", blueprint.decremented_input.items)
 					return
 				elseif minetest.get_content_id(blueprint:get_result():get_name()) == item_difference.id then
 					local start_row = arrayutil.next_matching_row(input_grid, nil, function(item)
@@ -347,7 +347,7 @@ function ArtisanryUI.update_from_output_inventory(player)
 							
 							current_stack:set_count(current_stack:get_count() - blueprint_stack:get_count())
 							
-							ArtisanryUI.inventory:set_stack(player:get_player_name() .. "-input", inventory_index, current_stack)
+							artisanryui.inventory:set_stack(player:get_player_name() .. "-input", inventory_index, current_stack)
 						end
 					end
 					

@@ -35,7 +35,7 @@ Usage
     local artisanry = Artisanry:new()
     
     -- Activate the inventory replacement.
-    ArtisanryUI.activate(artisanry)
+    artisanryui.activate(artisanry)
     
     -- You can register crafts like this.
     -- As input is a 2D table expected.
