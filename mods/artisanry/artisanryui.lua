@@ -270,35 +270,37 @@ function artisanryui.update_player_inventory(player, taken_stack)
 	local blueprints = artisanryui.last_blueprints_cache[player:get_player_name()]
 	
 	blueprints:foreach(function(blueprint)
-		if blueprint.decremented_input ~= nil then
-			artisanryui.inventory:set_list(player:get_player_name() .. "-input", blueprint.decremented_input.items)
-			return
-		elseif blueprint:get_result():get_name() == taken_stack:get_name() then
-			local start_row = arrayutil.next_matching_row(input_grid, nil, function(item)
-				return not artisanryutil.is_empty_item(item)
-			end)
-			local start_column = arrayutil.next_matching_column(input_grid, nil, function(item)
-				return not artisanryutil.is_empty_item(item)
-			end)
-			
-			local blueprint_input = blueprint:get_input()
-			
-			for row_index = start_row, start_row + #blueprint_input - 1, 1 do
-				local blueprint_row = blueprint_input[row_index - start_row + 1]
+		if blueprint:get_result():get_name() == taken_stack:get_name() then
+			if blueprint.decremented_input ~= nil then
+				-- This is an item registered with the default Minetest system.
+				artisanryui.inventory:set_list(player:get_player_name() .. "-input", blueprint.decremented_input.items)
+			else
+				local start_row = arrayutil.next_matching_row(input_grid, nil, function(item)
+					return not artisanryutil.is_empty_item(item)
+				end)
+				local start_column = arrayutil.next_matching_column(input_grid, nil, function(item)
+					return not artisanryutil.is_empty_item(item)
+				end)
 				
-				for column_index = start_column, start_column + #blueprint_row - 1, 1 do
-					local inventory_index = (row_index - 1) * 5 + column_index
+				local blueprint_input = blueprint:get_input()
+				
+				for row_index = start_row, start_row + #blueprint_input - 1, 1 do
+					local blueprint_row = blueprint_input[row_index - start_row + 1]
 					
-					local current_stack = input_grid[row_index][column_index]
-					local blueprint_stack = blueprint_row[column_index - start_column + 1]
-					
-					current_stack:set_count(current_stack:get_count() - blueprint_stack:get_count())
-					
-					artisanryui.inventory:set_stack(player:get_player_name() .. "-input", inventory_index, current_stack)
+					for column_index = start_column, start_column + #blueprint_row - 1, 1 do
+						local inventory_index = (row_index - 1) * 5 + column_index
+						
+						local current_stack = input_grid[row_index][column_index]
+						local blueprint_stack = blueprint_row[column_index - start_column + 1]
+						
+						current_stack:set_count(current_stack:get_count() - blueprint_stack:get_count())
+						
+						artisanryui.inventory:set_stack(player:get_player_name() .. "-input", inventory_index, current_stack)
+					end
 				end
 			end
 			
-			return
+			return true
 		end
 	end)
 end
