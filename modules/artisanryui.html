@@ -69,14 +69,6 @@
 	<td class="summary">Creates a detached inventory that is used.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#has_changed">has_changed (player, inventory_name)</a></td>
-	<td class="summary">Checks if the inventory has changed compared to the saved hash.</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#put_hash">put_hash (player, inventory_name)</a></td>
-	<td class="summary">Puts the hash of the inventory, for using it later.</td>
-	</tr>
-	<tr>
 	<td class="name" nowrap><a href="#replace_inventories">replace_inventories ()</a></td>
 	<td class="summary">Replaces the inventory of every currently connected player with
  the artisanryui one.</td>
@@ -86,16 +78,16 @@
 	<td class="summary">Replaces the inventory of the given player with the artisanryui one.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#update_inventory">update_inventory (player, force_update)</a></td>
-	<td class="summary">Updates the inventory of the given player.</td>
+	<td class="name" nowrap><a href="#scroll_page">scroll_page (player, formname, fields)</a></td>
+	<td class="summary">Callback for when the scroll buttons are pressed.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#update_from_input_inventory">update_from_input_inventory (player)</a></td>
 	<td class="summary">Updates from the input inventory of the given player.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#update_from_output_inventory">update_from_output_inventory (player)</a></td>
-	<td class="summary">Updates from the output inventory of the given player.</td>
+	<td class="name" nowrap><a href="#update_player_inventory">update_player_inventory (player, taken_stack)</a></td>
+	<td class="summary">Updates the players inventory based on the taken stack.</td>
 	</tr>
 </table>
 
@@ -173,58 +165,6 @@
 
 </dd>
     <dt>
-    <a name = "has_changed"></a>
-    <strong>has_changed (player, inventory_name)</strong>
-    </dt>
-    <dd>
-    Checks if the inventory has changed compared to the saved hash.
-
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">player</span>
-         The Player object that owns the inventory.
-        </li>
-        <li><span class="parameter">inventory_name</span>
-         The name of the inventory.
-        </li>
-    </ul>
-
-    <h3>Returns:</h3>
-    <ol>
-
-        true if the inventory has changed since the last check. Also true if
-         there is no saved hash for this inventory.
-    </ol>
-
-
-
-
-</dd>
-    <dt>
-    <a name = "put_hash"></a>
-    <strong>put_hash (player, inventory_name)</strong>
-    </dt>
-    <dd>
-    Puts the hash of the inventory, for using it later.
-
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">player</span>
-         The Player object that owns the inventory.
-        </li>
-        <li><span class="parameter">inventory_name</span>
-         The name of the inventory.
-        </li>
-    </ul>
-
-
-
-
-
-</dd>
-    <dt>
     <a name = "replace_inventories"></a>
     <strong>replace_inventories ()</strong>
     </dt>
@@ -260,20 +200,23 @@
 
 </dd>
     <dt>
-    <a name = "update_inventory"></a>
-    <strong>update_inventory (player, force_update)</strong>
+    <a name = "scroll_page"></a>
+    <strong>scroll_page (player, formname, fields)</strong>
     </dt>
     <dd>
-    Updates the inventory of the given player.
+    Callback for when the scroll buttons are pressed.
 
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">player</span>
-         The player for which to update the inventory.
+         The Player object from which the event originated.
         </li>
-        <li><span class="parameter">force_update</span>
-         Optional. If an update should be forced.
+        <li><span class="parameter">formname</span>
+         The name of the form.
+        </li>
+        <li><span class="parameter">fields</span>
+         The fields.
         </li>
     </ul>
 
@@ -303,17 +246,20 @@
 
 </dd>
     <dt>
-    <a name = "update_from_output_inventory"></a>
-    <strong>update_from_output_inventory (player)</strong>
+    <a name = "update_player_inventory"></a>
+    <strong>update_player_inventory (player, taken_stack)</strong>
     </dt>
     <dd>
-    Updates from the output inventory of the given player.
+    Updates the players inventory based on the taken stack.
 
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">player</span>
          The player for which to update the inventories.
+        </li>
+        <li><span class="parameter">taken_stack</span>
+         The ItemStack that was taken.
         </li>
     </ul>
 
