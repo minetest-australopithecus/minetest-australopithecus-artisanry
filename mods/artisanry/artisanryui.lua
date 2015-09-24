@@ -31,6 +31,9 @@ artisanryui = {
 	--- The Artisanry object that is used.
 	artisanry = nil,
 	
+	--- The provider that provides the formspec for players inventory.
+	formspec_provider = nil,
+	
 	--- The last blueprints of the players.
 	last_blueprints_cache = {},
 	
@@ -38,7 +41,7 @@ artisanryui = {
 	inventory = nil,
 	
 	--- The size of the output field.
-	output_size = 7 * 5,
+	output_size = nil,
 	
 	--- The cache what page the players are currently looking at.
 	pages = {}
@@ -47,12 +50,27 @@ artisanryui = {
 
 --- Activates the ArtinsaryUI.
 --
--- This function replaces all inventories of all currently coneccted players
+-- This function replaces all inventories of all currently connected players
 -- and also registers a callback to replace the inventory of every new player.
 --
 -- @param artisanry The Artisanry instance to use.
-function artisanryui.activate(artisanry)
+-- @param formspec_provider Optional. The provider for the formspec that is
+--                          to replace the inventories of the players. This is
+--                          a function that accepts the Player object and
+--                          returns the formspec. The important fields for
+--                          the formspec are a detached inventory with the name
+--                          "artisanrui" with the lists "PLAYERNAME-input" and
+--                          "PLAYERNAME-output", as two buttons with the names
+--                          "artisanryui-PLAYERNAME-next-page" and
+--                          "artisanryui-PLAYERNAME-previous-page". Can be nil
+--                          for the default one.
+-- @param output_size Optional. The size of the output field in the custom
+--                    formspec, as in how many single slots there are. Can be
+--                    nil for the default value of 35 (7 * 5).
+function artisanryui.activate(artisanry, formspec_provider, output_size)
 	artisanryui.artisanry = artisanry
+	artisanryui.formspec_provider = formspec_provider or artisanryui.build_formspec
+	artisanryui.output_size = output_size or (7 * 5)
 	artisanryui.inventory = artisanryui.create_inventory()
 	
 	artisanryui.replace_inventories()
@@ -101,8 +119,8 @@ function artisanryui.build_formspec(player)
 	local input = "list[detached:artisanryui;" .. player:get_player_name() .. "-input;1,1;5,5;]"
 	local result = "list[detached:artisanryui;" .. player:get_player_name() .. "-output;7,1;7,5;]"
 	
-	local previous_button = "button[7,6;2,1;artisanry-" .. player:get_player_name() .. "-previous-page;<<]"
-	local next_button = "button[12,6;2,1;artisanry-" .. player:get_player_name() .. "-next-page;>>]"
+	local previous_button = "button[7,6;2,1;artisanryui-" .. player:get_player_name() .. "-previous-page;<<]"
+	local next_button = "button[12,6;2,1;artisanryui-" .. player:get_player_name() .. "-next-page;>>]"
 	
 	local inventory = "list[current_player;main;3,7;8,4;]"
 	
@@ -190,7 +208,7 @@ function artisanryui.replace_inventory(player)
 	artisanryui.inventory:set_size(player:get_player_name() .. "-input", 5 * 5)
 	artisanryui.inventory:set_size(player:get_player_name() .. "-output", artisanryui.output_size)
 	
-	player:set_inventory_formspec(artisanryui.build_formspec(player))
+	player:set_inventory_formspec(artisanryui.formspec_provider(player))
 	
 	artisanryui.last_blueprints_cache[player:get_player_name()] = List:new()
 	
@@ -208,12 +226,12 @@ end
 -- @param formname The name of the form.
 -- @param fields The fields.
 function artisanryui.scroll_page(player, formname, fields)
-	if fields["artisanry-" .. player:get_player_name() .. "-next-page"] ~= nil then
+	if fields["artisanryui-" .. player:get_player_name() .. "-next-page"] ~= nil then
 		local pages = artisanryui.pages[player:get_player_name()]
 		pages.current = math.min(pages.current + 1, pages.max)
 		
 		artisanryui.update_from_input_inventory(player)
-	elseif fields["artisanry-" .. player:get_player_name() .. "-previous-page"] ~= nil then
+	elseif fields["artisanryui-" .. player:get_player_name() .. "-previous-page"] ~= nil then
 		local pages = artisanryui.pages[player:get_player_name()]
 		pages.current = math.max(pages.current - 1, 1)
 		
