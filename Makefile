@@ -4,15 +4,25 @@ mod_name := artisanry
 mods := mods
 release := release
 release_name := artisanry
+test := test
 
-all: doc
+
+all: test doc
 
 clean:
 	$(RM) -R $(doc)
 
 .PHONY: doc
 doc:
-	ldoc --dir=$(doc) mods/$(mod_name)
+	ldoc \
+		--dir=$(doc) \
+		--project=$(release_name) \
+		--title="$(release_name) Reference" \
+		mods/$(mod_name)
+
+.PHONY: gh-pages
+gh-pages:
+	git subtree push --prefix doc/ github gh-pages
 
 .PHONY: release
 release:
@@ -35,6 +45,10 @@ release:
 	tar -c --gz -C $(release) -f $(release)/$(release_name).tar.gz $(release_name)/
 	cd $(release); zip -r -9 $(release_name).zip $(release_name); cd -
 	
+.SILENT .PHONY: test
+test: $(test)/*.lua
+	$(foreach file,$^,lua $(file);)
+
 .PHONY: update-deps
 update-deps:
 	git submodule foreach git pull origin master
