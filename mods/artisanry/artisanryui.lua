@@ -76,6 +76,7 @@ function artisanryui.activate(artisanry, formspec_provider, output_size)
 	artisanryui.replace_inventories()
 	
 	minetest.register_on_joinplayer(artisanryui.replace_inventory)
+	minetest.register_on_player_receive_fields(artisanryui.drop_items)
 	minetest.register_on_player_receive_fields(artisanryui.scroll_page)
 end
 
@@ -191,6 +192,28 @@ function artisanryui.create_inventory()
 			artisanryui.update_from_input_inventory(player)
 		end
 	})
+end
+
+--- Drops all items in the input list if the player closes the inventory screen.
+--
+-- @param player The Player object.
+-- @param formname The name of the form.
+-- @param fields The fields.
+function artisanryui.drop_items(player, formname, fields)
+	if fields["quit"] then
+		local list_name = player:get_player_name() .. "-input"
+		local position = player:getpos()
+		
+		for index = 1, artisanryui.inventory:get_size(list_name), 1 do
+			local stack = artisanryui.inventory:get_stack(list_name, index)
+			
+			if not stack:is_empty() then
+				minetest.add_item(position, stack:to_string())
+				
+				artisanryui.inventory:set_stack(list_name, index, nil)
+			end
+		end
+	end
 end
 
 --- Replaces the inventory of every currently connected player with

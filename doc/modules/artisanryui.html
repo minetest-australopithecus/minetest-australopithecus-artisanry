@@ -71,6 +71,10 @@
 	<td class="summary">Creates a detached inventory that is used.</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#drop_items">drop_items (player, formname, fields)</a></td>
+	<td class="summary">Drops all items in the input list if the player closes the inventory screen.</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#replace_inventories">replace_inventories ()</a></td>
 	<td class="summary">Replaces the inventory of every currently connected player with
  the artisanryui one.</td>
@@ -208,6 +212,32 @@
 
         The detached inventory.
     </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "drop_items"></a>
+    <strong>drop_items (player, formname, fields)</strong>
+    </dt>
+    <dd>
+    Drops all items in the input list if the player closes the inventory screen.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">player</span>
+         The Player object.
+        </li>
+        <li><span class="parameter">formname</span>
+         The name of the form.
+        </li>
+        <li><span class="parameter">fields</span>
+         The fields.
+        </li>
+    </ul>
+
 
 
 
