@@ -268,7 +268,7 @@ function artisanryui.update_from_input_inventory(player)
 	
 	input = artisanryutil.flat_to_grid(input)
 	
-	local start_index = (page.current - 1) * artisanryui.output_size
+	local start_index = (page.current - 1) * artisanryui.output_size + 1
 	local output_blueprints = artisanryui.artisanry:get_blueprints(input)
 	
 	page.max = math.ceil(output_blueprints:size() / artisanryui.output_size)
