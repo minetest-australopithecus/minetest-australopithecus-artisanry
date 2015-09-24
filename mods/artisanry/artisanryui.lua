@@ -28,10 +28,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 --- artisanryui is a static, global object that allows to replace the inventory
 -- with the Artisanry one.
 artisanryui = {
+	--- The Artisanry object that is used.
 	artisanry = nil,
+	
+	--- The last blueprints of the players.
 	last_blueprints_cache = {},
+	
+	--- The inventory that is used for the input and output fields.
 	inventory = nil,
+	
+	--- The size of the output field.
 	output_size = 7 * 5,
+	
+	--- The cache what page the players are currently looking at.
 	pages = {}
 }
 
