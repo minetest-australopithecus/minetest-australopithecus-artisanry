@@ -40,10 +40,10 @@
 
 <h2>Modules</h2>
 <ul class="$(kind=='Topics' and '' or 'nowrap'">
-  <li><strong>artisanryui</strong></li>
-  <li><a href="../modules/blueprint.html">blueprint</a></li>
   <li><a href="../modules/artisanry.html">artisanry</a></li>
+  <li><a href="../modules/blueprint.html">blueprint</a></li>
   <li><a href="../modules/artisanryutil.html">artisanryutil</a></li>
+  <li><strong>artisanryui</strong></li>
 </ul>
 
 </div>
@@ -63,8 +63,12 @@
 	<td class="summary">Activates the ArtinsaryUI.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#build_formspec">build_formspec (player)</a></td>
+	<td class="name" nowrap><a href="#build_formspec">build_formspec (player, groups)</a></td>
 	<td class="summary">Builds the formspec for the artisanryui inventory.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#change_group">change_group (player, formname, fields)</a></td>
+	<td class="summary">Callback for when a different group is selected.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#create_inventory">create_inventory ()</a></td>
@@ -98,6 +102,10 @@
 </table>
 <h2><a href="#Tables">Tables</a></h2>
 <table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#groups">groups</a></td>
+	<td class="summary">The cache what group the player has currently selected.</td>
+	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#last_blueprints_cache">last_blueprints_cache</a></td>
 	<td class="summary">The last blueprints of the players.</td>
@@ -152,7 +160,8 @@
         <li><span class="parameter">formspec_provider</span>
          Optional. The provider for the formspec that is
                           to replace the inventories of the players. This is
-                          a function that accepts the Player object and
+                          a function that accepts the Player object, a List
+                          of sorted and unique group names (without nil) and
                           returns the formspec. The important fields for
                           the formspec are a detached inventory with the name
                           "artisanrui" with the lists "PLAYERNAME-input" and
@@ -175,7 +184,7 @@
 </dd>
     <dt>
     <a name = "build_formspec"></a>
-    <strong>build_formspec (player)</strong>
+    <strong>build_formspec (player, groups)</strong>
     </dt>
     <dd>
     Builds the formspec for the artisanryui inventory.
@@ -186,6 +195,9 @@
         <li><span class="parameter">player</span>
          The player.
         </li>
+        <li><span class="parameter">groups</span>
+         A List of group names.
+        </li>
     </ul>
 
     <h3>Returns:</h3>
@@ -193,6 +205,32 @@
 
         The formspec for the inventory.
     </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "change_group"></a>
+    <strong>change_group (player, formname, fields)</strong>
+    </dt>
+    <dd>
+    Callback for when a different group is selected.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">player</span>
+         The Player object from which the event originated.
+        </li>
+        <li><span class="parameter">formname</span>
+         The name of the form.
+        </li>
+        <li><span class="parameter">fields</span>
+         The fields.
+        </li>
+    </ul>
+
 
 
 
@@ -350,6 +388,20 @@
 </dl>
     <h2><a name="Tables"></a>Tables</h2>
     <dl class="function">
+    <dt>
+    <a name = "groups"></a>
+    <strong>groups</strong>
+    </dt>
+    <dd>
+    The cache what group the player has currently selected.
+
+
+
+
+
+
+
+</dd>
     <dt>
     <a name = "last_blueprints_cache"></a>
     <strong>last_blueprints_cache</strong>

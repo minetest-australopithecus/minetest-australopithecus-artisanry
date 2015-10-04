@@ -38,10 +38,10 @@
 
 <h2>Modules</h2>
 <ul class="$(kind=='Topics' and '' or 'nowrap'">
-  <li><a href="../modules/artisanryui.html">artisanryui</a></li>
-  <li><a href="../modules/blueprint.html">blueprint</a></li>
   <li><strong>artisanry</strong></li>
+  <li><a href="../modules/blueprint.html">blueprint</a></li>
   <li><a href="../modules/artisanryutil.html">artisanryutil</a></li>
+  <li><a href="../modules/artisanryui.html">artisanryui</a></li>
 </ul>
 
 </div>
@@ -60,7 +60,7 @@
 	<td class="summary">Creates a new instance of Artisanry.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Artisanry:get_blueprints">Artisanry:get_blueprints (input)</a></td>
+	<td class="name" nowrap><a href="#Artisanry:get_blueprints">Artisanry:get_blueprints (input, group)</a></td>
 	<td class="summary">Gets all BluePrints matching the given input.</td>
 	</tr>
 	<tr>
@@ -68,7 +68,11 @@
 	<td class="summary">Gets all BluePrints that match the given output.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Artisanry:register">Artisanry:register (result, input)</a></td>
+	<td class="name" nowrap><a href="#Artisanry:get_groups">Artisanry:get_groups ()</a></td>
+	<td class="summary">Gets all groups as sorted and unique List.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Artisanry:register">Artisanry:register (group, result, input)</a></td>
 	<td class="summary">Registers the given input for the given result.</td>
 	</tr>
 </table>
@@ -100,7 +104,7 @@
 </dd>
     <dt>
     <a name = "Artisanry:get_blueprints"></a>
-    <strong>Artisanry:get_blueprints (input)</strong>
+    <strong>Artisanry:get_blueprints (input, group)</strong>
     </dt>
     <dd>
     Gets all BluePrints matching the given input.
@@ -111,6 +115,9 @@
         <li><span class="parameter">input</span>
          The input, a 2D of strings or ItemStacks. Might be nil to
               retrieve all BluePrints.
+        </li>
+        <li><span class="parameter">group</span>
+         Optional. The name of the group to get. Defaults to "All".
         </li>
     </ul>
 
@@ -150,8 +157,27 @@
 
 </dd>
     <dt>
+    <a name = "Artisanry:get_groups"></a>
+    <strong>Artisanry:get_groups ()</strong>
+    </dt>
+    <dd>
+    Gets all groups as sorted and unique List.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        All groups as List.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
     <a name = "Artisanry:register"></a>
-    <strong>Artisanry:register (result, input)</strong>
+    <strong>Artisanry:register (group, result, input)</strong>
     </dt>
     <dd>
     Registers the given input for the given result.
@@ -159,6 +185,9 @@
 
     <h3>Parameters:</h3>
     <ul>
+        <li><span class="parameter">group</span>
+         The name of the group for this blueprint.
+        </li>
         <li><span class="parameter">result</span>
          The result of the input, an item string.
         </li>
