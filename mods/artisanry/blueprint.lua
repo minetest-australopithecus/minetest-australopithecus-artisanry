@@ -31,12 +31,14 @@ Blueprint = {}
 
 --- Creates a new instance of Blueprint.
 --
+-- @param group The name of the group of the blueprint.
 -- @param result The result of the blueprint, an item string like "sand 5"
 --               or "glass".
 -- @param input The input for the blueprint, a 2D array with 5 rows and columns.
 -- @return The new instance of Blueprint.
-function Blueprint:new(result, input)
+function Blueprint:new(group, result, input)
 	local instance = {
+		group = group,
 		input = artisanryutil.convert(input),
 		result = ItemStack(result)
 	}
@@ -76,6 +78,13 @@ function Blueprint:count(input)
 	end
 	
 	return count
+end
+
+--- Gets the group of this Blueprint.
+--
+-- @return The name of the group.
+function Blueprint:get_group()
+	return self.group
 end
 
 --- Gets the input for this Blueprint.

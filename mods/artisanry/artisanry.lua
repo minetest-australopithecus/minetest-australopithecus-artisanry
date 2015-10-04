@@ -48,16 +48,20 @@ end
 --
 -- @param input The input, a 2D of strings or ItemStacks. Might be nil to
 --              retrieve all BluePrints.
+-- @param group Optional. The name of the group to get. Defaults to "All".
 -- @return All matching BluePrints.
-function Artisanry:get_blueprints(input)
-	if input == nil then
-		return tableutil.clone(self.blueprints)
-	end
+function Artisanry:get_blueprints(input, group)
+	group = group or "All"
 	
 	local reduced_input = artisanryutil.convert(input)
 	
 	return self.blueprints:matching(function(blueprint)
-		return blueprint:match(reduced_input)
+		return (reduced_input == nil or blueprint:match(reduced_input))
+			and (group == "All"
+				or (group == "None" and (
+					blueprint:get_group() == nil
+					or blueprint:get_group() == "")
+				or (group == blueprint:get_group())))
 	end)
 end
 
@@ -81,12 +85,29 @@ function Artisanry:get_blueprints_from_output(output)
 	return self.blueprints:matching(comparer)
 end
 
+--- Gets all groups as sorted and unique List.
+--
+-- @return All groups as List.
+function Artisanry:get_groups()
+	local groups = List:new()
+	
+	self.blueprints:foreach(function(blueprint, index)
+		groups:add(blueprint:get_group())
+	end)
+	
+	groups:cull_duplicates()
+	groups:sort()
+	
+	return groups
+end
+
 --- Registers the given input for the given result.
 --
+-- @param group The name of the group for this blueprint.
 -- @param result The result of the input, an item string.
 -- @param input The 2D array of item strings or ItemStacks.
-function Artisanry:register(result, input)
-	self.blueprints:add(Blueprint:new(result, input))
+function Artisanry:register(group, result, input)
+	self.blueprints:add(Blueprint:new(group, result, input))
 end
 
 --- Registers the given BluePrint.

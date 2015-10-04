@@ -34,6 +34,9 @@ artisanryui = {
 	--- The provider that provides the formspec for players inventory.
 	formspec_provider = nil,
 	
+	--- The cache what group the player has currently selected.
+	groups = {},
+	
 	--- The last blueprints of the players.
 	last_blueprints_cache = {},
 	
@@ -56,7 +59,8 @@ artisanryui = {
 -- @param artisanry The Artisanry instance to use.
 -- @param formspec_provider Optional. The provider for the formspec that is
 --                          to replace the inventories of the players. This is
---                          a function that accepts the Player object and
+--                          a function that accepts the Player object, a List
+--                          of sorted and unique group names (without nil) and
 --                          returns the formspec. The important fields for
 --                          the formspec are a detached inventory with the name
 --                          "artisanrui" with the lists "PLAYERNAME-input" and
@@ -76,6 +80,7 @@ function artisanryui.activate(artisanry, formspec_provider, output_size)
 	artisanryui.replace_inventories()
 	
 	minetest.register_on_joinplayer(artisanryui.replace_inventory)
+	minetest.register_on_player_receive_fields(artisanryui.change_group)
 	minetest.register_on_player_receive_fields(artisanryui.drop_items)
 	minetest.register_on_player_receive_fields(artisanryui.scroll_page)
 end
@@ -83,8 +88,9 @@ end
 --- Builds the formspec for the artisanryui inventory.
 --
 -- @param player The player.
+-- @param groups A List of group names.
 -- @return The formspec for the inventory.
-function artisanryui.build_formspec(player)
+function artisanryui.build_formspec(player, groups)
 	local window = "size[15,12;]"
 	window = window .. "bgcolor[#00000000;true]"
 	window = window .. "listcolors[#00000000;#FFFFFF33]"
@@ -114,7 +120,7 @@ function artisanryui.build_formspec(player)
 	end
 	
 	for x = 2, 9, 1 do
-			inventory_background = inventory_background .. "background[" .. x .. ",6;3,3;artisanry_inventory_bg.png]"
+		inventory_background = inventory_background .. "background[" .. x .. ",6;3,3;artisanry_inventory_bg.png]"
 	end
 	
 	local input = "list[detached:artisanryui;" .. player:get_player_name() .. "-input;1,1;5,5;]"
@@ -122,6 +128,13 @@ function artisanryui.build_formspec(player)
 	
 	local previous_button = "button[7,6;2,1;artisanryui-" .. player:get_player_name() .. "-previous-page;<<]"
 	local next_button = "button[12,6;2,1;artisanryui-" .. player:get_player_name() .. "-next-page;>>]"
+	
+	local groups_string = ""
+	groups:foreach(function(group, index)
+		groups_string = groups_string .. "," .. group
+	end)
+	
+	local groups_list = "dropdown[9,6;3;group;All,None" .. groups_string .. ";1]"
 	
 	local inventory = "list[current_player;main;3,7;8,4;]"
 	
@@ -135,6 +148,7 @@ function artisanryui.build_formspec(player)
 		.. input_background
 		.. result_background
 		.. previous_button
+		.. groups_list
 		.. next_button
 		.. inventory_background
 		.. input
@@ -143,6 +157,19 @@ function artisanryui.build_formspec(player)
 		.. ring
 	
 	return formspec
+end
+
+--- Callback for when a different group is selected.
+--
+-- @param player The Player object from which the event originated.
+-- @param formname The name of the form.
+-- @param fields The fields.
+function artisanryui.change_group(player, formname, fields)
+	if fields["group"] then
+		artisanryui.groups[player:get_player_name()] = fields["group"]
+		
+		artisanryui.update_from_input_inventory(player)
+	end
 end
 
 --- Creates a detached inventory that is used.
@@ -231,7 +258,10 @@ function artisanryui.replace_inventory(player)
 	artisanryui.inventory:set_size(player:get_player_name() .. "-input", 5 * 5)
 	artisanryui.inventory:set_size(player:get_player_name() .. "-output", artisanryui.output_size)
 	
-	player:set_inventory_formspec(artisanryui.formspec_provider(player))
+	local groups = artisanryui.artisanry:get_groups()
+	local formspec = artisanryui.formspec_provider(player, groups)
+	
+	player:set_inventory_formspec(formspec)
 	
 	artisanryui.last_blueprints_cache[player:get_player_name()] = List:new()
 	
@@ -272,7 +302,13 @@ function artisanryui.update_from_input_inventory(player)
 	local blueprints = artisanryui.last_blueprints_cache[player:get_player_name()]
 	blueprints:clear()
 	
+	local group = artisanryui.groups[player:get_player_name()]
+	if group == nil then
+		group = "All"
+	end
+	
 	local page = artisanryui.pages[player:get_player_name()]
+	
 	local result, decremented_input = minetest.get_craft_result({
 		method = "normal",
 		width = 5,
@@ -292,7 +328,7 @@ function artisanryui.update_from_input_inventory(player)
 	input = artisanryutil.flat_to_grid(input)
 	
 	local start_index = (page.current - 1) * artisanryui.output_size + 1
-	local output_blueprints = artisanryui.artisanry:get_blueprints(input)
+	local output_blueprints = artisanryui.artisanry:get_blueprints(input, group)
 	
 	page.max = math.ceil(output_blueprints:size() / artisanryui.output_size)
 	
