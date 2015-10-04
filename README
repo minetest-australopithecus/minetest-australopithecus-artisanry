@@ -39,20 +39,20 @@ Usage
     
     -- You can register crafts like this.
     -- As input is a 2D table expected.
-    artinsary:register("yourmod:output", {
-    	{ "yourmod:input" }
+    artinsary:register("My Group", "yourmod:output", {
+        { "yourmod:input" }
     })
     
-    artinsary:register("yourmod:output", {
-    	{ "yourmod:different_input" }
+    artinsary:register("My Group", "yourmod:output", {
+        { "yourmod:different_input" }
     })
     
     -- And here is the complete input.
-    artinsary:register("yourmod:output", {
-    	{ "", "", "yourmod:different_input", "", "" },
-    	{ "", "", "", "", "" },
-    	{ "", "", "", "", "" },
-    	{ "", "", "", "", "" },
-    	{ "", "", "", "", "" }
+    artinsary:register("My Group", "yourmod:output", {
+        { "", "", "yourmod:different_input", "", "" },
+        { "", "", "", "", "" },
+        { "", "", "", "", "" },
+        { "", "", "", "", "" },
+        { "", "", "", "", "" }
     })
 
