@@ -317,7 +317,10 @@ function artisanryui.update_from_input_inventory(player)
 		items = input
 	})
 	
-	if not result.item:is_empty() and page.current == 1 then
+	if not result.item:is_empty()
+		and page.current == 1
+		and (group == "All" or group == "None") then
+		
 		artisanryui.inventory:set_stack(player:get_player_name() .. "-output", index, result.item)
 		blueprints:add({
 			decremented_input = decremented_input,
