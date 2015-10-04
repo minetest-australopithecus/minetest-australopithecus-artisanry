@@ -65,9 +65,11 @@ artisanryui = {
 --                          the formspec are a detached inventory with the name
 --                          "artisanrui" with the lists "PLAYERNAME-input" and
 --                          "PLAYERNAME-output", as two buttons with the names
---                          "artisanryui-PLAYERNAME-next-page" and
---                          "artisanryui-PLAYERNAME-previous-page". Can be nil
---                          for the default one.
+--                          "artisanryui-next-page" and
+--                          "artisanryui-previous-page". Also a dropdown or
+--                          similar with the name "artisanryui-group" which
+--                          contains the group to display. Can be nil for
+--                          the default one.
 -- @param output_size Optional. The size of the output field in the custom
 --                    formspec, as in how many single slots there are. Can be
 --                    nil for the default value of 35 (7 * 5).
@@ -126,15 +128,15 @@ function artisanryui.build_formspec(player, groups)
 	local input = "list[detached:artisanryui;" .. player:get_player_name() .. "-input;1,1;5,5;]"
 	local result = "list[detached:artisanryui;" .. player:get_player_name() .. "-output;7,1;7,5;]"
 	
-	local previous_button = "button[7,6;2,1;artisanryui-" .. player:get_player_name() .. "-previous-page;<<]"
-	local next_button = "button[12,6;2,1;artisanryui-" .. player:get_player_name() .. "-next-page;>>]"
+	local previous_button = "button[7,6;2,1;artisanryui-previous-page;<<]"
+	local next_button = "button[12,6;2,1;artisanryui-next-page;>>]"
 	
 	local groups_string = ""
 	groups:foreach(function(group, index)
 		groups_string = groups_string .. "," .. group
 	end)
 	
-	local groups_list = "dropdown[9,6;3;group;All,None" .. groups_string .. ";1]"
+	local groups_list = "dropdown[9,6;3;artisanryui-group;All,None" .. groups_string .. ";1]"
 	
 	local inventory = "list[current_player;main;3,7;8,4;]"
 	
@@ -165,8 +167,8 @@ end
 -- @param formname The name of the form.
 -- @param fields The fields.
 function artisanryui.change_group(player, formname, fields)
-	if fields["group"] then
-		artisanryui.groups[player:get_player_name()] = fields["group"]
+	if fields["artisanryui-group"] then
+		artisanryui.groups[player:get_player_name()] = fields["artisanryui-group"]
 		
 		artisanryui.update_from_input_inventory(player)
 	end
@@ -279,12 +281,12 @@ end
 -- @param formname The name of the form.
 -- @param fields The fields.
 function artisanryui.scroll_page(player, formname, fields)
-	if fields["artisanryui-" .. player:get_player_name() .. "-next-page"] ~= nil then
+	if fields["artisanryui-next-page"] ~= nil then
 		local pages = artisanryui.pages[player:get_player_name()]
 		pages.current = math.min(pages.current + 1, pages.max)
 		
 		artisanryui.update_from_input_inventory(player)
-	elseif fields["artisanryui-" .. player:get_player_name() .. "-previous-page"] ~= nil then
+	elseif fields["artisanryui-previous-page"] ~= nil then
 		local pages = artisanryui.pages[player:get_player_name()]
 		pages.current = math.max(pages.current - 1, 1)
 		
