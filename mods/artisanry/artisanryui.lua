@@ -237,7 +237,7 @@ function artisanryui.drop_items(player, formname, fields)
 			local stack = artisanryui.inventory:get_stack(list_name, index)
 			
 			if not stack:is_empty() then
-				minetest.add_item(position, stack:to_string())
+				itemutil.blop(player, stack)
 				
 				artisanryui.inventory:set_stack(list_name, index, nil)
 			end
